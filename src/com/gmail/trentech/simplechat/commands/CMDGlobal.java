@@ -1,0 +1,86 @@
+package com.gmail.trentech.simplechat.commands;
+
+import java.util.Optional;
+
+import org.spongepowered.api.command.CommandException;
+import org.spongepowered.api.command.CommandResult;
+import org.spongepowered.api.command.CommandSource;
+import org.spongepowered.api.command.args.CommandContext;
+import org.spongepowered.api.command.source.ConsoleSource;
+import org.spongepowered.api.command.spec.CommandExecutor;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.Text.Builder;
+import org.spongepowered.api.text.channel.MessageChannel;
+import org.spongepowered.api.text.channel.MessageReceiver;
+import org.spongepowered.api.text.channel.MutableMessageChannel;
+import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.text.serializer.TextSerializers;
+
+import com.gmail.trentech.simplechat.utils.Mute;
+import com.gmail.trentech.simpletags.tags.DefaultTag;
+import com.gmail.trentech.simpletags.tags.GroupTag;
+import com.gmail.trentech.simpletags.tags.PlayerTag;
+import com.gmail.trentech.simpletags.tags.WorldTag;
+
+public class CMDGlobal implements CommandExecutor {
+
+	@Override
+	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
+		if(src instanceof ConsoleSource){
+			src.sendMessage(Text.of(TextColors.DARK_RED, "Player only command. use /say"));
+			return CommandResult.empty();
+		}
+		Player player = (Player) src;
+		
+		if(!args.hasAny("message")){
+			src.sendMessage(Text.of(TextColors.YELLOW, "/global <message>"));
+			return CommandResult.empty();
+		}
+		
+		Text message = TextSerializers.FORMATTING_CODE.deserialize(": " + args.<String>getOne("message").get());
+		
+		MutableMessageChannel messageChannel = MessageChannel.TO_ALL.asMutable();
+
+    	Iterable<MessageReceiver> oldRecip = messageChannel.getMembers();
+    	
+    	for(MessageReceiver recip : oldRecip){
+			if(recip instanceof Player){
+				Player recipient = (Player) src;
+				
+				if(Mute.get(recipient).get().getPlayers().contains(player.getUniqueId().toString())){
+					messageChannel.removeMember(recip);
+				}
+			}
+    	}
+    	
+		Text playerTag = Text.EMPTY;
+		Text worldTag = Text.EMPTY;
+		Builder groupTagBuilder = Text.builder();
+
+		Optional<PlayerTag> optionalPlayerTag = PlayerTag.get(player);
+		
+		if(!optionalPlayerTag.isPresent()){
+			playerTag = DefaultTag.get(player).get().getTag();
+		}else{
+			playerTag = PlayerTag.get(player).get().getTag();	
+		}
+				
+		worldTag = WorldTag.get(player.getWorld()).get().getTag();
+
+		for(GroupTag groupTag : GroupTag.all()){
+			String group = groupTag.getName();
+			
+			if(!player.hasPermission("simpletags.group." + group)){
+				continue;
+			}
+			
+			groupTagBuilder.append(groupTag.getTag());
+		}
+		
+		messageChannel.send(Text.of(worldTag, groupTagBuilder.build(), playerTag, message));
+
+		return CommandResult.success();
+	}
+
+}
