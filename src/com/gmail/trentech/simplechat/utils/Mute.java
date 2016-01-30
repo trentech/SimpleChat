@@ -62,7 +62,9 @@ public class Mute extends SQLUtils {
 					if(dbList != null){
 						String[] receiverArray = dbList.split(";");
 						optionalMute = Optional.of(new Mute(name, new ArrayList<String>(Arrays.asList(receiverArray))));
-					}	
+					}else{
+						optionalMute = Optional.of(new Mute(name, new ArrayList<String>()));
+					}
 					break;
 				}			
 			}

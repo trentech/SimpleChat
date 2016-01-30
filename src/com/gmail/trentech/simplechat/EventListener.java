@@ -1,11 +1,7 @@
 package com.gmail.trentech.simplechat;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
-import org.spongepowered.api.command.CommandSource;
-import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.filter.cause.First;
@@ -13,9 +9,11 @@ import org.spongepowered.api.event.message.MessageChannelEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.text.channel.MessageReceiver;
+import org.spongepowered.api.text.channel.MutableMessageChannel;
 
 import com.gmail.trentech.simplechat.utils.ConfigManager;
 import com.gmail.trentech.simplechat.utils.Mute;
+import com.google.common.collect.Lists;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -29,57 +27,58 @@ public class EventListener {
 	
 	@Listener
 	public void MessageChannelEventChat(MessageChannelEvent.Chat event, @First Player player){
-		MessageChannel channel = MessageChannel.TO_ALL;
+		MutableMessageChannel channel = MessageChannel.TO_ALL.asMutable();
 
 		ConfigurationNode config = new ConfigManager().getConfig();	
-		
-		Set<CommandSource> recipients = new HashSet<CommandSource>();
 
     	if(config.getNode("Options", "World-Chat").getBoolean()){
-    		Collection<Entity> entities = player.getWorld().getEntities();
-    		for(Entity entity : entities){
-    			if(entity instanceof Player){
-    				Player recipient = (Player) entity;
-    				recipients.add(recipient);
+    		List<MessageReceiver> recipients = Lists.newArrayList(channel.getMembers());
+
+    		for(MessageReceiver src : recipients){
+    			if(src instanceof Player){
+    				Player recipient = (Player) src;
+    				
+    				if(!recipient.getWorld().equals(player.getWorld())){
+    					channel.removeMember(src);
+    				}
     			}
     		}  		
     	}
     	
-    	if(config.getNode("Options", "Ranged-Chat", "Enable").getBoolean()){
-    		Iterable<MessageReceiver> oldRecip = channel.getMembers();
-    		for(MessageReceiver src : oldRecip){
+    	if(config.getNode("Options", "Ranged-Chat", "Enable").getBoolean()){ 		
+    		List<MessageReceiver> recipients = Lists.newArrayList(channel.getMembers());
+    		
+    		for(MessageReceiver src : recipients){
     			if(src instanceof Player){
+    				Player recipient = (Player) src;
+    				
     				int range = config.getNode("Options", "Ranged-Chat", "Range").getInt();
 			
     				double playerX = player.getLocation().getX();
     				double playerZ = player.getLocation().getZ();
 
-    				double recipientX = player.getLocation().getX();
-    				double recipientZ = player.getLocation().getZ();
+    				double recipientX = recipient.getLocation().getX();
+    				double recipientZ = recipient.getLocation().getZ();
     				
     				double distance = Math.sqrt((recipientX-playerX)*(recipientX-playerX) + (recipientZ-playerZ)*(recipientZ-playerZ));
 
     				if(distance > range){
-    					recipients.remove(src);
+    					channel.removeMember(src);
     				}
     			}
     		}
     	}
    	
-    	Iterable<MessageReceiver> oldRecip = channel.getMembers();
+    	List<MessageReceiver> recipients = Lists.newArrayList(channel.getMembers());
     	
-    	for(MessageReceiver src : oldRecip){
+    	for(MessageReceiver src : recipients){
 			if(src instanceof Player){
 				Player recipient = (Player) src;
 				
 				if(Mute.get(recipient).get().getPlayers().contains(player.getUniqueId().toString())){
-					recipients.remove(src);
+					channel.removeMember(src);
 				}
 			}
-    	}
-    	
-    	if(!recipients.isEmpty()){
-    		channel = MessageChannel.fixed(recipients);
     	}
 
     	event.setChannel(channel);

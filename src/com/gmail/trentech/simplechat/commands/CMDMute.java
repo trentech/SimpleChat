@@ -34,7 +34,7 @@ public class CMDMute implements CommandExecutor {
 		}
 		Player target = optionalPlayer.get();
 		
-		if(player.hasPermission("simplechat.unmute")){
+		if(target.hasPermission("simplechat.unmute")){
 			src.sendMessage(Text.of(TextColors.DARK_RED, "You cannot mute this player"));
 			return CommandResult.empty();
 		}
@@ -43,10 +43,10 @@ public class CMDMute implements CommandExecutor {
 		
 		if(mute.getPlayers().contains(target.getUniqueId().toString())){
 			mute.removePlayer(target);
-			player.sendMessage(Text.of(TextColors.DARK_GREEN, "Un-Muted", playerName));
+			player.sendMessage(Text.of(TextColors.DARK_GREEN, playerName, " can now speak"));
 		}else{
 			mute.addPlayer(target);
-			player.sendMessage(Text.of(TextColors.DARK_GREEN, "Muted ", playerName));
+			player.sendMessage(Text.of(TextColors.DARK_GREEN, playerName, " has been muted"));
 		}
 		
 		return CommandResult.success();

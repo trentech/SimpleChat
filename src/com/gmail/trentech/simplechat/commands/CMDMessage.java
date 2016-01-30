@@ -43,7 +43,7 @@ public class CMDMessage implements CommandExecutor {
 		Player player = optionalPlayer.get();
 
 		if((src instanceof Player) && Mute.get(player).get().getPlayers().contains(((Player) src).getUniqueId().toString())){
-			src.sendMessage(Text.of(TextColors.DARK_RED, playerName, " has muted you. You cannot only reply to a message from this player"));
+			src.sendMessage(Text.of(TextColors.DARK_RED, playerName, " has muted you. You can only reply to a message from this player"));
 			return CommandResult.empty();
 		}
 		

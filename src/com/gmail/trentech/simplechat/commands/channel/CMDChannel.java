@@ -27,6 +27,7 @@ import com.gmail.trentech.simplechat.utils.Mute;
 import com.gmail.trentech.simpletags.tags.ChannelTag;
 import com.gmail.trentech.simpletags.tags.DefaultTag;
 import com.gmail.trentech.simpletags.tags.PlayerTag;
+import com.google.common.collect.Lists;
 
 public class CMDChannel implements CommandExecutor {
 
@@ -56,14 +57,14 @@ public class CMDChannel implements CommandExecutor {
 			
 			MutableMessageChannel messageChannel = MessageChannel.permission("simplechat.channel." + channel).asMutable();
 
-	    	Iterable<MessageReceiver> oldRecip = messageChannel.getMembers();
+	    	List<MessageReceiver> recipients = Lists.newArrayList(messageChannel.getMembers());
 	    	
-	    	for(MessageReceiver recip : oldRecip){
-				if(recip instanceof Player){
-					Player recipient = (Player) src;
+	    	for(MessageReceiver msgReceiver : recipients){
+				if(msgReceiver instanceof Player){
+					Player recipient = (Player) msgReceiver;
 					
 					if(Mute.get(recipient).get().getPlayers().contains(player.getUniqueId().toString())){
-						messageChannel.removeMember(recip);
+						messageChannel.removeMember(msgReceiver);
 					}
 				}
 	    	}

@@ -1,5 +1,6 @@
 package com.gmail.trentech.simplechat.commands;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.spongepowered.api.command.CommandException;
@@ -22,6 +23,7 @@ import com.gmail.trentech.simpletags.tags.DefaultTag;
 import com.gmail.trentech.simpletags.tags.GroupTag;
 import com.gmail.trentech.simpletags.tags.PlayerTag;
 import com.gmail.trentech.simpletags.tags.WorldTag;
+import com.google.common.collect.Lists;
 
 public class CMDGlobal implements CommandExecutor {
 
@@ -42,14 +44,14 @@ public class CMDGlobal implements CommandExecutor {
 		
 		MutableMessageChannel messageChannel = MessageChannel.TO_ALL.asMutable();
 
-    	Iterable<MessageReceiver> oldRecip = messageChannel.getMembers();
+    	List<MessageReceiver> recipients = Lists.newArrayList(messageChannel.getMembers());
     	
-    	for(MessageReceiver recip : oldRecip){
-			if(recip instanceof Player){
-				Player recipient = (Player) src;
+    	for(MessageReceiver msgReceiver : recipients){
+			if(msgReceiver instanceof Player){
+				Player recipient = (Player) msgReceiver;
 				
 				if(Mute.get(recipient).get().getPlayers().contains(player.getUniqueId().toString())){
-					messageChannel.removeMember(recip);
+					messageChannel.removeMember(msgReceiver);
 				}
 			}
     	}
