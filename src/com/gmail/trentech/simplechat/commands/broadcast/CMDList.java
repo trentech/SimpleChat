@@ -40,6 +40,8 @@ public class CMDList implements CommandExecutor {
 			i++;
 		}
 		
+		pages.contents(list);
+		
 		pages.sendTo(src);
 		
 		return CommandResult.success();
