@@ -4,15 +4,14 @@ import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
-import org.spongepowered.api.command.source.ConsoleSource;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
+import com.gmail.trentech.simplechat.utils.Help;
 import com.gmail.trentech.simpletags.tags.ConsoleTag;
-import com.gmail.trentech.simpletags.utils.Help;
 
 public class CMDSay implements CommandExecutor {
 
@@ -29,12 +28,6 @@ public class CMDSay implements CommandExecutor {
 			src.sendMessage(Text.of(TextColors.YELLOW, "/say <message>"));
 			return CommandResult.empty();
 		}
-
-		if(!(src instanceof ConsoleSource)){
-			src.sendMessage(Text.of(TextColors.DARK_RED, "Console only command!"));
-			return CommandResult.empty();
-		}
-		
 		String message = args.<String>getOne("message").get();
 		
 		MessageChannel channel = MessageChannel.TO_ALL;

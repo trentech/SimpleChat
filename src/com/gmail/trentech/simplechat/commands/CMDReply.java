@@ -12,7 +12,7 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 
 import com.gmail.trentech.simplechat.Main;
 import com.gmail.trentech.simplechat.utils.ConfigManager;
-import com.gmail.trentech.simpletags.utils.Help;
+import com.gmail.trentech.simplechat.utils.Help;
 
 import ninja.leaping.configurate.ConfigurationNode;
 

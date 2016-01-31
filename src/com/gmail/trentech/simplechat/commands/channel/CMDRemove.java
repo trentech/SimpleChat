@@ -9,7 +9,7 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.simpletags.tags.ChannelTag;
-import com.gmail.trentech.simpletags.utils.Help;
+import com.gmail.trentech.simplechat.utils.Help;
 
 public class CMDRemove implements CommandExecutor {
 

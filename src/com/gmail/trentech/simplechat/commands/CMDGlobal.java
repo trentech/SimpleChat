@@ -18,12 +18,13 @@ import org.spongepowered.api.text.channel.MutableMessageChannel;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
+import com.gmail.trentech.simplechat.utils.Help;
 import com.gmail.trentech.simplechat.utils.Mute;
 import com.gmail.trentech.simpletags.tags.DefaultTag;
 import com.gmail.trentech.simpletags.tags.GroupTag;
 import com.gmail.trentech.simpletags.tags.PlayerTag;
 import com.gmail.trentech.simpletags.tags.WorldTag;
-import com.gmail.trentech.simpletags.utils.Help;
+
 import com.google.common.collect.Lists;
 
 public class CMDGlobal implements CommandExecutor {
