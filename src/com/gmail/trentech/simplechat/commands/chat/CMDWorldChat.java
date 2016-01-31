@@ -9,11 +9,19 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.simplechat.utils.ConfigManager;
+import com.gmail.trentech.simpletags.utils.Help;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
 public class CMDWorldChat implements CommandExecutor {
 
+	public CMDWorldChat(){
+		Help help = new Help("worldchat", "worldchat", " Toggle on and off world specific chat");
+		help.setSyntax(" /chat worldchat <boolean>\n /c w <boolean>");
+		help.setExample(" /chat worldchat true");
+		help.save();
+	}
+	
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if(args.hasAny("boolean")) {

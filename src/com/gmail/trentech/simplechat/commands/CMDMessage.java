@@ -16,11 +16,19 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 import com.gmail.trentech.simplechat.Main;
 import com.gmail.trentech.simplechat.utils.ConfigManager;
 import com.gmail.trentech.simplechat.utils.Mute;
+import com.gmail.trentech.simpletags.utils.Help;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
 public class CMDMessage implements CommandExecutor {
 
+	public CMDMessage(){
+		Help help = new Help("message", "message", " Send a private message to a player");
+		help.setSyntax(" /message <player> <message>\n /msg <player> <message>");
+		help.setExample(" /message Notch I found diamond");
+		help.save();
+	}
+	
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if(!args.hasAny("playerName")) {

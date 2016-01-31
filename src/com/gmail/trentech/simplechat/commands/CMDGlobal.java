@@ -23,10 +23,18 @@ import com.gmail.trentech.simpletags.tags.DefaultTag;
 import com.gmail.trentech.simpletags.tags.GroupTag;
 import com.gmail.trentech.simpletags.tags.PlayerTag;
 import com.gmail.trentech.simpletags.tags.WorldTag;
+import com.gmail.trentech.simpletags.utils.Help;
 import com.google.common.collect.Lists;
 
 public class CMDGlobal implements CommandExecutor {
 
+	public CMDGlobal(){
+		Help help = new Help("global", "global", " Send chat message to all players");
+		help.setSyntax(" /global <message>\n /g <message>");
+		help.setExample(" /global Hello people");
+		help.save();
+	}
+	
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if(src instanceof ConsoleSource){

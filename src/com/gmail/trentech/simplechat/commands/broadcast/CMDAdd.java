@@ -12,9 +12,17 @@ import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.simplechat.Main;
 import com.gmail.trentech.simplechat.utils.ConfigManager;
+import com.gmail.trentech.simpletags.utils.Help;
 
 public class CMDAdd implements CommandExecutor {
 
+	public CMDAdd(){
+		Help help = new Help("add", "add", " Add message to broadcast list");
+		help.setSyntax(" /broadcast add <message>\n /b a <message>");
+		help.setExample(" /broadcast add Welcome to the server");
+		help.save();
+	}
+	
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if(!args.hasAny("message")) {

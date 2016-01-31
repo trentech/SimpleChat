@@ -13,9 +13,17 @@ import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.simplechat.Main;
 import com.gmail.trentech.simplechat.utils.Mute;
+import com.gmail.trentech.simpletags.utils.Help;
 
 public class CMDMute implements CommandExecutor {
 
+	public CMDMute(){
+		Help help = new Help("mute", "mute", " Mutes player from sending you any kind of message, public or private");
+		help.setSyntax(" /mute <player>\n /m <player>");
+		help.setExample(" /mute Notch");
+		help.save();
+	}
+	
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if(!args.hasAny("player")) {

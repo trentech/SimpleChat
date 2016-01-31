@@ -12,9 +12,17 @@ import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.simplechat.Main;
 import com.gmail.trentech.simplechat.utils.ConfigManager;
+import com.gmail.trentech.simpletags.utils.Help;
 
 public class CMDRemove implements CommandExecutor {
 
+	public CMDRemove(){
+		Help help = new Help("bremove", "remove", " Remove message from broadcast list");
+		help.setSyntax(" /broadcast remove <index>\n /b r <message>");
+		help.setExample(" /broadcast remove 4");
+		help.save();
+	}
+	
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if(!args.hasAny("index")) {

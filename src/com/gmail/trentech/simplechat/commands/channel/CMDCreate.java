@@ -9,9 +9,17 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.simpletags.tags.ChannelTag;
+import com.gmail.trentech.simpletags.utils.Help;
 
 public class CMDCreate implements CommandExecutor {
 
+	public CMDCreate(){
+		Help help = new Help("ccreate", "create", " Create a new channel");
+		help.setSyntax(" /channel create <channel>\n /c c <channel>");
+		help.setExample(" /channel create ch1");
+		help.save();
+	}
+	
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if(!args.hasAny("channel")) {

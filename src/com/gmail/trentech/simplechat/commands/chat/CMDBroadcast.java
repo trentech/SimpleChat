@@ -14,11 +14,19 @@ import org.spongepowered.api.text.format.TextColors;
 import com.gmail.trentech.simplechat.Main;
 import com.gmail.trentech.simplechat.utils.Broadcast;
 import com.gmail.trentech.simplechat.utils.ConfigManager;
+import com.gmail.trentech.simpletags.utils.Help;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
 public class CMDBroadcast implements CommandExecutor {
 
+	public CMDBroadcast(){
+		Help help = new Help("broadcast", "broadcast", " Toggle on and off auto broadcasts");
+		help.setSyntax(" /chat broadcast <boolean> [time]\n /c b <boolean> [value]");
+		help.setExample(" /chat broadcast false\n /chat broadcast true 1");
+		help.save();
+	}
+	
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if(!args.hasAny("boolean")) {
@@ -32,6 +40,17 @@ public class CMDBroadcast implements CommandExecutor {
 		
 		if(bool.equalsIgnoreCase("true")){
 			config.getNode("Broadcast", "Enable").setValue(true);
+			
+			if(args.hasAny("value")){
+				String value = args.<String>getOne("value").get();
+				try{
+					config.getNode("Broadcast", "Minutes").setValue(value);
+				}catch(Exception e){
+					src.sendMessage(Text.of(TextColors.DARK_RED, value, " is not a valid value"));
+					return CommandResult.empty();
+				}
+			}
+			
 			configManager.save();
 
 			Set<Task> tasks = Main.getGame().getScheduler().getScheduledTasks();

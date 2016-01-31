@@ -9,11 +9,19 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.simplechat.utils.ConfigManager;
+import com.gmail.trentech.simpletags.utils.Help;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
 public class CMDRange implements CommandExecutor {
 
+	public CMDRange(){
+		Help help = new Help("range", "range", " Toggle on and off chat range");
+		help.setSyntax(" /chat range <boolean> [value]\n /c r <boolean> [value]");
+		help.setExample(" /chat range false\n /chat range true 64");
+		help.save();
+	}
+	
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if(!args.hasAny("boolean")) {
@@ -32,14 +40,12 @@ public class CMDRange implements CommandExecutor {
 		
 		if(args.hasAny("value")) {
 			String value = args.<String>getOne("value").get();
-			int range = 0;
 			try{
-				range = Integer.parseInt(value);
+				config.getNode("Options", "Ranged-Chat", "Range").setValue(Integer.parseInt(value));
 			}catch(Exception e){
 				src.sendMessage(Text.of(TextColors.DARK_RED, value, " is not a valid value"));
 				return CommandResult.empty();
 			}			
-			config.getNode("Options", "Ranged-Chat", "Range").setValue(range);
 		}
 		
 		config.getNode("Options", "Ranged-Chat", "Enable").setValue(Boolean.parseBoolean(bool));

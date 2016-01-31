@@ -43,7 +43,34 @@ public class CMDChat implements CommandExecutor {
 			list.add(Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("Click command for more information ")))
 					.onClick(TextActions.executeCallback(Help.getHelp("worldchat"))).append(Text.of(" /chat worldchat")).build());
 		}
-		
+		if(src.hasPermission("simplechat.cmd.broadcast")){
+			list.add(Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("Click command for more information ")))
+					.onClick(TextActions.runCommand("/broadcast")).append(Text.of(" /broadcast")).build());
+		}
+		if(src.hasPermission("simplechat.cmd.channel")){
+			list.add(Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("Click command for more information ")))
+					.onClick(TextActions.runCommand("/channel")).append(Text.of(" /channel")).build());
+		}
+		if(src.hasPermission("simplechat.cmd.global")){
+			list.add(Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("Click command for more information ")))
+					.onClick(TextActions.executeCallback(Help.getHelp("global"))).append(Text.of(" /global")).build());
+		}
+		if(src.hasPermission("simplechat.cmd.message")){
+			list.add(Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("Click command for more information ")))
+					.onClick(TextActions.executeCallback(Help.getHelp("message"))).append(Text.of(" /message")).build());
+		}
+		if(src.hasPermission("simplechat.cmd.mute")){
+			list.add(Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("Click command for more information ")))
+					.onClick(TextActions.executeCallback(Help.getHelp("mute"))).append(Text.of(" /mute")).build());
+		}
+		if(src.hasPermission("simplechat.cmd.reply")){
+			list.add(Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("Click command for more information ")))
+					.onClick(TextActions.executeCallback(Help.getHelp("reply"))).append(Text.of(" /reply")).build());
+		}
+		if(src.hasPermission("simplechat.cmd.say")){
+			list.add(Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("Click command for more information ")))
+					.onClick(TextActions.executeCallback(Help.getHelp("say"))).append(Text.of(" /say")).build());
+		}
 		pages.contents(list);	
 		pages.sendTo(src);
 

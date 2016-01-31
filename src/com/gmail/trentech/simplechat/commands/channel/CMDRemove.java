@@ -9,9 +9,17 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.simpletags.tags.ChannelTag;
+import com.gmail.trentech.simpletags.utils.Help;
 
 public class CMDRemove implements CommandExecutor {
 
+	public CMDRemove(){
+		Help help = new Help("cremove", "remove", " Remove channel from server");
+		help.setSyntax(" /channel remove <channel>\n /c r <channel>");
+		help.setExample(" /channel remove ch1");
+		help.save();
+	}
+	
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if(!args.hasAny("channel")) {

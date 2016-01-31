@@ -15,9 +15,17 @@ import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.simplechat.Main;
 import com.gmail.trentech.simpletags.tags.ChannelTag;
+import com.gmail.trentech.simpletags.utils.Help;
 
 public class CMDList implements CommandExecutor {
 
+	public CMDList(){
+		Help help = new Help("clist", "list", " List all channels");
+		help.setSyntax(" /channel list\n /c l");
+		help.setExample(" /channel list");
+		help.save();
+	}
+	
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		PaginationBuilder pages = Main.getGame().getServiceManager().provide(PaginationService.class).get().builder();

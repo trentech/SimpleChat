@@ -12,9 +12,17 @@ import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 import com.gmail.trentech.simpletags.tags.ConsoleTag;
+import com.gmail.trentech.simpletags.utils.Help;
 
 public class CMDSay implements CommandExecutor {
 
+	public CMDSay(){
+		Help help = new Help("say", "say", " Send a message to the server from the console");
+		help.setSyntax(" /say <message>\n /s <message>");
+		help.setExample(" /say Drop party coming soon");
+		help.save();
+	}
+	
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if(!args.hasAny("message")){
