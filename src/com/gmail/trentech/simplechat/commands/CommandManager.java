@@ -42,6 +42,11 @@ public class CommandManager {
 		    .executor(new CMDMute())
 		    .build();
 	
+	public CommandSpec cmdMail = CommandSpec.builder()
+		    .permission("simplechat.cmd.mail")
+		    .arguments(GenericArguments.optional(GenericArguments.string(Text.of("player"))), GenericArguments.optional(GenericArguments.remainingJoinedStrings(Text.of("message"))))
+		    .executor(new CMDMail())
+		    .build();
 	
 	private CommandSpec cmdBAdd = CommandSpec.builder()
 		    .permission("simplechat.cmd.broadcast.add")

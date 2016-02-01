@@ -1,5 +1,6 @@
 package com.gmail.trentech.simplechat;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.spongepowered.api.entity.living.player.Player;
@@ -7,12 +8,18 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.message.MessageChannelEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.Text.Builder;
+import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.text.channel.MutableMessageChannel;
+import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.simplechat.utils.ConfigManager;
+import com.gmail.trentech.simplechat.utils.Message;
 import com.gmail.trentech.simplechat.utils.Mute;
+import com.gmail.trentech.simplechat.utils.SQLUtils;
 import com.google.common.collect.Lists;
 
 import ninja.leaping.configurate.ConfigurationNode;
@@ -23,6 +30,30 @@ public class EventListener {
 	public void onClientConnectionEventJoin(ClientConnectionEvent.Join event) {
 	    Player player = event.getTargetEntity();
 	    new Mute(player);
+	    
+    	SQLUtils.createPlayerTable(player);
+
+        LinkedList<Message> messages = Message.all(player);
+
+    	boolean unread = false;
+    	
+    	for(Message message : messages){
+    		if(message.isRead()){
+    			continue;
+    		}
+    		
+    		unread = true;
+
+			break;
+    	}
+    	
+    	if(unread){
+			Builder builder = Text.builder().color(TextColors.GREEN).append(Text.of("You have unread messages! /mail"));
+			builder.onClick(TextActions.runCommand("/mail"));
+            builder.onHover(TextActions.showText(Text.of("Click to open mailbox")));
+
+            player.sendMessage(builder.build());
+    	}
 	}
 	
 	@Listener

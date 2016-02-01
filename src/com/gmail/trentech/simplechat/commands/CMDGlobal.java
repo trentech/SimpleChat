@@ -12,6 +12,7 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.Text.Builder;
+import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.text.channel.MutableMessageChannel;
@@ -64,17 +65,18 @@ public class CMDGlobal implements CommandExecutor {
 				}
 			}
     	}
-    	
-		Text playerTag = Text.EMPTY;
+
 		Text worldTag = Text.EMPTY;
 		Builder groupTagBuilder = Text.builder();
+		
+		Builder playerTag = Text.builder().onHover(TextActions.showText(Text.of(player.getName())));
 
 		Optional<PlayerTag> optionalPlayerTag = PlayerTag.get(player);
 		
 		if(!optionalPlayerTag.isPresent()){
-			playerTag = DefaultTag.get(player).get().getTag();
+			playerTag.append(DefaultTag.get(player).get().getTag());
 		}else{
-			playerTag = PlayerTag.get(player).get().getTag();	
+			playerTag.append(PlayerTag.get(player).get().getTag());
 		}
 				
 		worldTag = WorldTag.get(player.getWorld()).get().getTag();
@@ -89,7 +91,7 @@ public class CMDGlobal implements CommandExecutor {
 			groupTagBuilder.append(groupTag.getTag());
 		}
 		
-		messageChannel.send(Text.of(worldTag, groupTagBuilder.build(), playerTag, message));
+		messageChannel.send(Text.of(worldTag, groupTagBuilder.build(), playerTag.build(), message));
 
 		return CommandResult.success();
 	}

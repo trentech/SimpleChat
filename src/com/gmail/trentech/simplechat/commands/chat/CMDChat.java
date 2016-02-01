@@ -55,6 +55,10 @@ public class CMDChat implements CommandExecutor {
 			list.add(Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("Click command for more information ")))
 					.onClick(TextActions.executeCallback(Help.getHelp("global"))).append(Text.of(" /global")).build());
 		}
+		if(src.hasPermission("simplechat.cmd.mail")){
+			list.add(Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("Click command for more information ")))
+					.onClick(TextActions.executeCallback(Help.getHelp("mail"))).append(Text.of(" /mail")).build());
+		}
 		if(src.hasPermission("simplechat.cmd.message")){
 			list.add(Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("Click command for more information ")))
 					.onClick(TextActions.executeCallback(Help.getHelp("message"))).append(Text.of(" /message")).build());

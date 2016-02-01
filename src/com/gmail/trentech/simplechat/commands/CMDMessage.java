@@ -32,7 +32,7 @@ public class CMDMessage implements CommandExecutor {
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if(!args.hasAny("playerName")) {
-			src.sendMessage(Text.of(TextColors.YELLOW, "/msg <player> <message>"));
+			src.sendMessage(Text.of(TextColors.YELLOW, "/message <player> <message>"));
 			return CommandResult.empty();
 		}
 		String playerName = args.<String>getOne("playerName").get();

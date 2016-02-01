@@ -14,6 +14,7 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.service.pagination.PaginationBuilder;
 import org.spongepowered.api.service.pagination.PaginationService;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.Text.Builder;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.text.channel.MessageReceiver;
@@ -69,13 +70,17 @@ public class CMDChannel implements CommandExecutor {
 				}
 	    	}
 	    	
+			Builder playerTag = Text.builder().onHover(TextActions.showText(Text.of(player.getName())));
+
 			Optional<PlayerTag> optionalPlayerTag = PlayerTag.get(player);
 			
-			if(optionalPlayerTag.isPresent()){
-				messageChannel.send(Text.of(optionalChannelTag.get().getTag(), optionalPlayerTag.get().getTag(), TextColors.WHITE, ": ", TextSerializers.FORMATTING_CODE.deserialize(message)));
+			if(!optionalPlayerTag.isPresent()){
+				playerTag.append(DefaultTag.get(player).get().getTag());
 			}else{
-				messageChannel.send(Text.of(optionalChannelTag.get().getTag(), DefaultTag.get(player).get().getTag(), TextColors.WHITE, ": ", TextSerializers.FORMATTING_CODE.deserialize(message)));
+				playerTag.append(PlayerTag.get(player).get().getTag());
 			}
+
+			messageChannel.send(Text.of(optionalChannelTag.get().getTag(), playerTag.build(), TextColors.WHITE, ": ", TextSerializers.FORMATTING_CODE.deserialize(message)));
 			
 			return CommandResult.success();
 		}

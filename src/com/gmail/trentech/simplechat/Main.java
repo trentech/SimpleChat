@@ -50,8 +50,10 @@ public class Main {
 		}
 		PluginContainer plugin = optionalPlugin.get();
 		
-		if(!plugin.getVersion().equals("0.1.0")){
-			getLog().error("Version conflict! SimpleChat requires at least SimpleTags v0.1.0");
+		String[] version = plugin.getVersion().split("\\.");
+
+		if(Integer.parseInt(version[2]) < 1){
+			getLog().error("SimpleChat requires SimpleTags v0.1.0 or above");
 			return;
 		}
 		
@@ -61,6 +63,7 @@ public class Main {
 		getGame().getCommandManager().register(this, new CommandManager().cmdChannel, "channel", "ch");
 		getGame().getCommandManager().register(this, new CommandManager().cmdChat, "chat", "cm");
 		getGame().getCommandManager().register(this, new CommandManager().cmdGlobal, "global", "g");
+		getGame().getCommandManager().register(this, new CommandManager().cmdMail, "mail", "ml");
 		getGame().getCommandManager().register(this, new CommandManager().cmdMessage, "message", "msg");
 		getGame().getCommandManager().register(this, new CommandManager().cmdMute, "mute", "m");
 		getGame().getCommandManager().register(this, new CommandManager().cmdReply, "reply", "r");
@@ -74,7 +77,7 @@ public class Main {
 			new Broadcast().start(config);
 		}
 		
-		SQLUtils.createTables();
+		SQLUtils.createTable();
 	}
 
 	public static Game getGame() {
