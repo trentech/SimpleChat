@@ -53,7 +53,7 @@ public class Main {
 		String[] version = plugin.getVersion().split("\\.");
 
 		if(Integer.parseInt(version[2]) < 2){
-			getLog().error("SimpleChat requires SimpleTags v0.1.2 or above");
+			getLog().error("SimpleChat requires SimpleTags v0.1.3 or above");
 			return;
 		}
 		
