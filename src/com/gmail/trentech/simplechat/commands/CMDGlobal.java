@@ -2,6 +2,8 @@ package com.gmail.trentech.simplechat.commands;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -10,6 +12,8 @@ import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.source.ConsoleSource;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.service.context.Context;
+import org.spongepowered.api.service.permission.Subject;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.Text.Builder;
 import org.spongepowered.api.text.action.TextActions;
@@ -78,19 +82,24 @@ public class CMDGlobal implements CommandExecutor {
 		}else{
 			playerTag.append(PlayerTag.get(player).get().getTag());
 		}
-				
-		worldTag = WorldTag.get(player.getWorld()).get().getTag();
-
-		for(GroupTag groupTag : GroupTag.all()){
-			String group = groupTag.getName();
-			
-			if(!player.hasPermission("simpletags.group." + group)){
-				continue;
-			}
-			
-			groupTagBuilder.append(groupTag.getTag());
-		}
 		
+		Optional<WorldTag> optionalWorldTag = WorldTag.get(player.getWorld());
+		
+		if(optionalWorldTag.isPresent()){
+			worldTag = WorldTag.get(player.getWorld()).get().getTag();
+		}
+
+		for(Entry<Set<Context>, List<Subject>> parent : player.getSubjectData().getAllParents().entrySet()){
+			for(Subject subject : parent.getValue()){
+				String group = subject.getIdentifier();
+				Optional<GroupTag> optionalGroupTag = GroupTag.get(group);
+				
+				if(optionalGroupTag.isPresent()){
+					groupTagBuilder.append(optionalGroupTag.get().getTag());
+				}			
+			}
+		}
+
 		messageChannel.send(Text.of(worldTag, groupTagBuilder.build(), playerTag.build(), message));
 
 		return CommandResult.success();

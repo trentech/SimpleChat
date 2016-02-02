@@ -45,15 +45,15 @@ public class Main {
 		Optional<PluginContainer> optionalPlugin = game.getPluginManager().getPlugin("SimpleTags");
 		
 		if(!optionalPlugin.isPresent()){
-			getLog().error("SimpleTags v0.1.0 not found! SimpleChat disabled");
+			getLog().error("SimpleTags not found! SimpleChat disabled");
 			return;
 		}
 		PluginContainer plugin = optionalPlugin.get();
 		
 		String[] version = plugin.getVersion().split("\\.");
 
-		if(Integer.parseInt(version[2]) < 1){
-			getLog().error("SimpleChat requires SimpleTags v0.1.0 or above");
+		if(Integer.parseInt(version[2]) < 2){
+			getLog().error("SimpleChat requires SimpleTags v0.1.2 or above");
 			return;
 		}
 		
