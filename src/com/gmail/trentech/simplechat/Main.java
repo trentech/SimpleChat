@@ -21,9 +21,11 @@ import com.gmail.trentech.simplechat.utils.ConfigManager;
 import com.gmail.trentech.simplechat.utils.Resource;
 import com.gmail.trentech.simplechat.utils.SQLUtils;
 
+import me.flibio.updatifier.Updatifier;
 import ninja.leaping.configurate.ConfigurationNode;
 
-@Plugin(id = Resource.ID, name = Resource.NAME, dependencies = "after:SimpleTags", version = Resource.VERSION)
+@Updatifier(repoName = Resource.ID, repoOwner = "TrenTech", version = Resource.VERSION)
+@Plugin(id = Resource.ID, name = Resource.NAME, dependencies = "after:SimpleTags,Updatifier", version = Resource.VERSION)
 public class Main {
 
 	private static Game game;
