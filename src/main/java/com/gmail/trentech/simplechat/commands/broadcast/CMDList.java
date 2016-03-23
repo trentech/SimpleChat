@@ -36,7 +36,7 @@ public class CMDList implements CommandExecutor {
 		
 		int i = 0;
 		for(String message : Main.getBroadcasts()){
-			list.add(Text.of(TextColors.GREEN,"[",i,"]", TextSerializers.FORMATTING_CODE.deserialize(message)));
+			list.add(Text.of(TextColors.GREEN,"[",i,"] ", TextColors.RESET, TextSerializers.FORMATTING_CODE.deserialize(message)));
 			i++;
 		}
 		

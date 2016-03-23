@@ -48,6 +48,8 @@ public class CMDRemove implements CommandExecutor {
 		
 		configManager.save();
 		
+		src.sendMessage(Text.of(TextColors.GREEN, "Message saved"));
+		
 		return CommandResult.success();
 	}
 

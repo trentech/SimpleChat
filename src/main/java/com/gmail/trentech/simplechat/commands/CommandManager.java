@@ -56,7 +56,7 @@ public class CommandManager {
 	
 	private CommandSpec cmdBRemove = CommandSpec.builder()
 		    .permission("simplechat.cmd.broadcast.remove")
-		    .arguments(GenericArguments.optional(GenericArguments.remainingJoinedStrings(Text.of("channel"))))
+		    .arguments(GenericArguments.optional(GenericArguments.remainingJoinedStrings(Text.of("index"))))
 		    .executor(new com.gmail.trentech.simplechat.commands.broadcast.CMDRemove())
 		    .build();
 	
