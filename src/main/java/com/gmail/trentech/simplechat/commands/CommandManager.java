@@ -104,7 +104,7 @@ public class CommandManager {
 
 	private CommandSpec cmdBroadcast1 = CommandSpec.builder()
 		    .permission("simplechat.cmd.chat.broadcast")
-		    .arguments(GenericArguments.optional(GenericArguments.remainingJoinedStrings(Text.of("boolean"))))
+		    .arguments(GenericArguments.optional(GenericArguments.string(Text.of("boolean"))), GenericArguments.optional(GenericArguments.string(Text.of("value"))))
 		    .executor(new com.gmail.trentech.simplechat.commands.chat.CMDBroadcast())
 		    .build();
 
