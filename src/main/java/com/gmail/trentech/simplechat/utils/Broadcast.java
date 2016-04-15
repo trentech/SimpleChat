@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
-import org.spongepowered.api.text.serializer.TextSerializers;
 
 import com.gmail.trentech.simplechat.Main;
 import com.gmail.trentech.simpletags.tags.BroadcastTag;
@@ -40,10 +39,8 @@ public class Broadcast {
             	while(played.contains(number)){
             		number = random.nextInt(size);
             	}
-            	
-            	Text message = TextSerializers.FORMATTING_CODE.deserialize(Main.getBroadcasts().get(number));
 
-            	Main.getGame().getServer().getBroadcastChannel().send(Text.of(BroadcastTag.get().get().getTag(), TextColors.WHITE, ": ", message));
+            	Main.getGame().getServer().getBroadcastChannel().send(Text.of(BroadcastTag.get().get().getTag(), TextColors.WHITE, ": ", Main.getBroadcast(Main.getBroadcasts().get(number))));
             	
             	played.add(number);
             }

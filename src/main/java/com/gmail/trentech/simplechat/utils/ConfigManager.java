@@ -80,7 +80,11 @@ public class ConfigManager {
 	        	list.add("&eWelcome to &5SERVER NAME&e! This is an auto broacast!");
 	        	list.add("&eBreak stone blocks with a pickaxe!");
 	        	list.add("&eYou can delete these message and create your own!");
-
+	        	list.add("&eCreate clickable link &u{url;www.google.com;&1Click Here}&e like so");
+	        	list.add("&eCreate clickable command &u{cmd;/say hello world;&1Click Here}&e like so");
+	        	list.add("&eCreate clickable suggested command &u{suggest;/say hello world;&1Click Here}&e like so");
+	        	list.add("&eCreate hovered text &u{hover;&3secret text;&1Hover Here}&e like so");
+	        	
 	        	config.getNode("Broadcast", "Messages").setValue(list);     	
 	        }
 		}

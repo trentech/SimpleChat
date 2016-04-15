@@ -12,7 +12,6 @@ import org.spongepowered.api.service.pagination.PaginationList.Builder;
 import org.spongepowered.api.service.pagination.PaginationService;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
-import org.spongepowered.api.text.serializer.TextSerializers;
 
 import com.gmail.trentech.simplechat.Main;
 import com.gmail.trentech.simplechat.utils.Help;
@@ -36,7 +35,7 @@ public class CMDList implements CommandExecutor {
 		
 		int i = 0;
 		for(String message : Main.getBroadcasts()){
-			list.add(Text.of(TextColors.GREEN,"[",i,"] ", TextColors.RESET, TextSerializers.FORMATTING_CODE.deserialize(message)));
+			list.add(Text.of(TextColors.GREEN,"[",i,"] ", TextColors.RESET, Main.getBroadcast(message)));
 			i++;
 		}
 		
