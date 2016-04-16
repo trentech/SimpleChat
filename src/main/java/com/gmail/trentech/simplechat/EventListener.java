@@ -7,14 +7,17 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.message.MessageChannelEvent;
+import org.spongepowered.api.event.message.MessageEvent.MessageFormatter;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.Text.Builder;
+import org.spongepowered.api.text.TextTemplate;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.text.channel.MutableMessageChannel;
 import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.text.serializer.TextSerializers;
 
 import com.gmail.trentech.simplechat.utils.ConfigManager;
 import com.gmail.trentech.simplechat.utils.Message;
@@ -113,5 +116,13 @@ public class EventListener {
     	}
 
     	event.setChannel(channel);
+    	
+		String messageOrig = TextSerializers.FORMATTING_CODE.serialize(event.getFormatter().getBody().toText());
+
+		Text message = Main.processText(messageOrig);
+		
+		MessageFormatter formatter = event.getFormatter();
+		
+		formatter.setBody(TextTemplate.of(message));
 	}
 }

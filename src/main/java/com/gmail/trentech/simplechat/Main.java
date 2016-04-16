@@ -2,10 +2,7 @@ package com.gmail.trentech.simplechat;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
@@ -18,16 +15,15 @@ import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
+import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 import com.gmail.trentech.simplechat.commands.CommandManager;
 import com.gmail.trentech.simplechat.utils.Broadcast;
-import com.gmail.trentech.simplechat.utils.ConfigManager;
 import com.gmail.trentech.simplechat.utils.Resource;
 import com.gmail.trentech.simplechat.utils.SQLUtils;
 
 import me.flibio.updatifier.Updatifier;
-import ninja.leaping.configurate.ConfigurationNode;
 
 @Updatifier(repoName = "SimpleChat", repoOwner = "TrenTech", version = Resource.VERSION)
 @Plugin(id = Resource.ID, name = Resource.NAME, version = Resource.VERSION, authors = Resource.AUTHOR, url = Resource.URL, description = Resource.DESCRIPTION, dependencies = {@Dependency(id = "Updatifier", optional = true), @Dependency(id = "com.gmail.trentech.simpletags", version = "0.2.5")})
@@ -37,7 +33,6 @@ public class Main {
 	private static Logger log;
 	private static PluginContainer plugin;
 
-	private static List<String> broadcasts = new ArrayList<>();
 	private static HashMap<String, String> reply = new HashMap<String, String>();
 	
 	@Listener
@@ -60,15 +55,9 @@ public class Main {
 		getGame().getCommandManager().register(this, new CommandManager().cmdMute, "mute", "m");
 		getGame().getCommandManager().register(this, new CommandManager().cmdReply, "reply", "r");
 		getGame().getCommandManager().register(this, new CommandManager().cmdSay, "say", "s");
-		
-		ConfigurationNode config = new ConfigManager().getConfig();
-		
-		broadcasts = config.getNode("Broadcast", "Messages").getChildrenList().stream().map(ConfigurationNode::getString).collect(Collectors.toList());
-		
-		if(config.getNode("Broadcast", "Enable").getBoolean()){
-			new Broadcast().start(config);
-		}
-		
+
+		Broadcast.init();
+
 		SQLUtils.createTable();
 	}
 
@@ -84,11 +73,11 @@ public class Main {
 		return plugin;
 	}
 
-	public static List<String> getBroadcasts() {
-		return broadcasts;
+	public static HashMap<String, String> getReply() {
+		return reply;
 	}
 	
-	public static Text getBroadcast(String msg){
+	public static Text processText(String msg){
     	Text message = Text.EMPTY;
 
     	while(msg.contains("&u")){
@@ -103,23 +92,21 @@ public class Main {
     	
     	return Text.of(message, TextSerializers.FORMATTING_CODE.deserialize(msg));
 	}
-
-	public static HashMap<String, String> getReply() {
-		return reply;
-	}
 	
     private static Text getLink(String link){
     	Text.Builder builder = Text.builder();
     	String[] work = link.split(";");
 		if(work[0].equalsIgnoreCase("url")){
-			if(!work[1].toLowerCase().contains("http://") || !work[1].toLowerCase().contains("https://")){
+			if(!work[1].toLowerCase().contains("http://") && !work[1].toLowerCase().contains("https://")){
 				work[1] = "http://" + work[1];	
 			}
 			URL url = null;
 			try {
 				url = new URL(work[1]);
 				builder.onClick(TextActions.openUrl(url)).append(TextSerializers.FORMATTING_CODE.deserialize(work[2]));					
-			} catch (MalformedURLException e) {}
+			} catch (MalformedURLException e) {
+				return Text.of(TextColors.RED, "Invalid URL detected");
+			}
 		}else if(work[0].equalsIgnoreCase("cmd")){
 			builder.onClick(TextActions.runCommand(work[1])).append(TextSerializers.FORMATTING_CODE.deserialize(work[2]));							
 		}else if(work[0].equalsIgnoreCase("suggest")){

@@ -1,6 +1,7 @@
 package com.gmail.trentech.simplechat.commands.broadcast;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -11,8 +12,11 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.simplechat.Main;
+import com.gmail.trentech.simplechat.utils.Broadcast;
 import com.gmail.trentech.simplechat.utils.ConfigManager;
 import com.gmail.trentech.simplechat.utils.Help;
+
+import ninja.leaping.configurate.ConfigurationNode;
 
 public class CMDAdd implements CommandExecutor {
 
@@ -33,11 +37,16 @@ public class CMDAdd implements CommandExecutor {
 		
 		ConfigManager configManager = new ConfigManager();
 		
-		List<String> broadcasts = Main.getBroadcasts();
+		List<Text> broadcasts = Broadcast.getBroadcasts();
 		
-		Main.getBroadcasts().add(message);
+		broadcasts.add(Main.processText(message));
 		
-		configManager.getConfig().getNode("Broadcast", "Messages").setValue(broadcasts);
+		ConfigurationNode node = configManager.getConfig().getNode("Broadcast", "Messages");
+		
+		List<String> list = node.getChildrenList().stream().map(ConfigurationNode::getString).collect(Collectors.toList());
+		list.add(message);
+		
+		node.setValue(list);
 		
 		configManager.save();
 		

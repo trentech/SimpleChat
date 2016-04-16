@@ -10,7 +10,8 @@ import java.util.UUID;
 
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.serializer.TextSerializers;
+
+import com.gmail.trentech.simplechat.Main;
 
 public class Message extends SQLUtils{
 
@@ -46,7 +47,7 @@ public class Message extends SQLUtils{
 	}
 	
 	public Text getMessage(){
-		return TextSerializers.FORMATTING_CODE.deserialize(message);	
+		return Main.processText(message);	
 	}
 
 	public boolean isRead(){

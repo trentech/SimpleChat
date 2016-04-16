@@ -1,9 +1,9 @@
 package com.gmail.trentech.simplechat.commands;
 
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -21,15 +21,14 @@ import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.text.channel.MutableMessageChannel;
 import org.spongepowered.api.text.format.TextColors;
-import org.spongepowered.api.text.serializer.TextSerializers;
 
+import com.gmail.trentech.simplechat.Main;
 import com.gmail.trentech.simplechat.utils.Help;
 import com.gmail.trentech.simplechat.utils.Mute;
 import com.gmail.trentech.simpletags.tags.DefaultTag;
 import com.gmail.trentech.simpletags.tags.GroupTag;
 import com.gmail.trentech.simpletags.tags.PlayerTag;
 import com.gmail.trentech.simpletags.tags.WorldTag;
-
 import com.google.common.collect.Lists;
 
 public class CMDGlobal implements CommandExecutor {
@@ -53,8 +52,7 @@ public class CMDGlobal implements CommandExecutor {
 			src.sendMessage(Text.of(TextColors.YELLOW, "/global <message>"));
 			return CommandResult.empty();
 		}
-		
-		Text message = TextSerializers.FORMATTING_CODE.deserialize(": " + args.<String>getOne("message").get());
+		Text message = Main.processText(args.<String>getOne("message").get());
 		
 		MutableMessageChannel messageChannel = MessageChannel.TO_ALL.asMutable();
 
@@ -105,7 +103,7 @@ public class CMDGlobal implements CommandExecutor {
 			}
 		}
 
-		messageChannel.send(Text.of(worldTag, groupTagBuilder.build(), playerTag.build(), message));
+		messageChannel.send(Text.of(worldTag, groupTagBuilder.build(), playerTag.build(), TextColors.RESET, ": ", message));
 
 		return CommandResult.success();
 	}

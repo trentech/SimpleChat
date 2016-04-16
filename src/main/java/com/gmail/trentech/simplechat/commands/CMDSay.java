@@ -8,8 +8,8 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.text.format.TextColors;
-import org.spongepowered.api.text.serializer.TextSerializers;
 
+import com.gmail.trentech.simplechat.Main;
 import com.gmail.trentech.simplechat.utils.Help;
 import com.gmail.trentech.simpletags.tags.ConsoleTag;
 
@@ -32,7 +32,7 @@ public class CMDSay implements CommandExecutor {
 		
 		MessageChannel channel = MessageChannel.TO_ALL;
 
-		channel.send(Text.of(ConsoleTag.get().get().getTag(), TextColors.WHITE, ": ", TextSerializers.FORMATTING_CODE.deserialize(message)));	
+		channel.send(Text.of(ConsoleTag.get().get().getTag(), TextColors.WHITE, ": ", Main.processText(message)));	
 
 		return CommandResult.success();
 	}

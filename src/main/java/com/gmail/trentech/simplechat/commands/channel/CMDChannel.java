@@ -20,7 +20,6 @@ import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.text.channel.MutableMessageChannel;
 import org.spongepowered.api.text.format.TextColors;
-import org.spongepowered.api.text.serializer.TextSerializers;
 
 import com.gmail.trentech.simplechat.Main;
 import com.gmail.trentech.simplechat.utils.Help;
@@ -80,7 +79,7 @@ public class CMDChannel implements CommandExecutor {
 				playerTag.append(PlayerTag.get(player).get().getTag());
 			}
 
-			messageChannel.send(Text.of(optionalChannelTag.get().getTag(), playerTag.build(), TextColors.WHITE, ": ", TextSerializers.FORMATTING_CODE.deserialize(message)));
+			messageChannel.send(Text.of(optionalChannelTag.get().getTag(), playerTag.build(), TextColors.WHITE, ": ", Main.processText(message)));
 			
 			return CommandResult.success();
 		}

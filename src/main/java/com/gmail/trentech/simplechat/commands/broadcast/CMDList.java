@@ -14,6 +14,7 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.simplechat.Main;
+import com.gmail.trentech.simplechat.utils.Broadcast;
 import com.gmail.trentech.simplechat.utils.Help;
 
 public class CMDList implements CommandExecutor {
@@ -34,8 +35,8 @@ public class CMDList implements CommandExecutor {
 		List<Text> list = new ArrayList<>();
 		
 		int i = 0;
-		for(String message : Main.getBroadcasts()){
-			list.add(Text.of(TextColors.GREEN,"[",i,"] ", TextColors.RESET, Main.getBroadcast(message)));
+		for(Text message : Broadcast.getBroadcasts()){
+			list.add(Text.of(TextColors.GREEN,"[",i,"] ", TextColors.RESET, message));
 			i++;
 		}
 		

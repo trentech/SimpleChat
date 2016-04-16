@@ -13,7 +13,6 @@ import org.spongepowered.api.service.pagination.PaginationService;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
-import org.spongepowered.api.text.serializer.TextSerializers;
 
 import com.gmail.trentech.simplechat.Main;
 import com.gmail.trentech.simplechat.utils.Help;
@@ -27,7 +26,7 @@ public class CMDBroadcast implements CommandExecutor {
 			String message = args.<String>getOne("message").get();
 
 		    Main.getGame().getServer().getBroadcastChannel().send(Text.of(BroadcastTag.get().get().getTag(), TextColors.WHITE, ": ",
-		    			TextSerializers.FORMATTING_CODE.deserialize(message)));
+		    			Main.processText(message)));
 
 			return CommandResult.success();
 		}

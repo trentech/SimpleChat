@@ -11,12 +11,11 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
-import org.spongepowered.api.text.serializer.TextSerializers;
 
 import com.gmail.trentech.simplechat.Main;
 import com.gmail.trentech.simplechat.utils.ConfigManager;
-import com.gmail.trentech.simplechat.utils.Mute;
 import com.gmail.trentech.simplechat.utils.Help;
+import com.gmail.trentech.simplechat.utils.Mute;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -61,7 +60,7 @@ public class CMDMessage implements CommandExecutor {
 		}
 		String messagePlain = args.<String>getOne("message").get();
 		
-		Text message = Text.of(TextColors.GOLD, "[", src.getName(), "] --> [", player.getName(), "]", TextColors.WHITE, ": ", TextSerializers.FORMATTING_CODE.deserialize(messagePlain));
+		Text message = Text.of(TextColors.GOLD, "[", src.getName(), "] --> [", player.getName(), "]", TextColors.WHITE, ": ", Main.processText(messagePlain));
 
 		player.sendMessage(message);
 		src.sendMessage(message);
