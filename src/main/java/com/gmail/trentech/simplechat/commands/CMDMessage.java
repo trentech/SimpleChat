@@ -39,7 +39,7 @@ public class CMDMessage implements CommandExecutor {
 		Optional<Player> optionalPlayer = Main.getGame().getServer().getPlayer(playerName);
 		
 		if(!optionalPlayer.isPresent()) {
-			Main.getReply().remove(src.getName());
+			CMDReply.getReply().remove(src.getName());
 			if(!playerName.equalsIgnoreCase("Server")){
 				src.sendMessage(Text.of(TextColors.DARK_RED, playerName, " is offline."));
 				return CommandResult.empty();
@@ -71,7 +71,7 @@ public class CMDMessage implements CommandExecutor {
 			Main.getGame().getServer().getConsole().sendMessage(message);
 		}
 		
-        Main.getReply().put(player.getName(), src.getName());
+        CMDReply.getReply().put(player.getName(), src.getName());
         
 		return CommandResult.success();		
 	}

@@ -1,5 +1,7 @@
 package com.gmail.trentech.simplechat.commands;
 
+import java.util.HashMap;
+
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -17,6 +19,8 @@ import ninja.leaping.configurate.ConfigurationNode;
 
 public class CMDReply implements CommandExecutor {
 
+	private static HashMap<String, String> reply = new HashMap<String, String>();
+	
 	public CMDReply(){
 		Help help = new Help("reply", "reply", " Reply to a player that sent you a private message");
 		help.setSyntax(" /reply <message>\n /r <message>");
@@ -26,17 +30,17 @@ public class CMDReply implements CommandExecutor {
 	
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		if(!Main.getReply().containsKey(src.getName())){
+		if(!getReply().containsKey(src.getName())){
 			src.sendMessage(Text.of(TextColors.DARK_RED, "No message to reply to."));
 			return CommandResult.empty();
 		}
-		String playerName = Main.getReply().get(src.getName());
+		String playerName = getReply().get(src.getName());
 
 		CommandSource recipient;
 		if(!playerName.equalsIgnoreCase("Server")){
 			if(!(Main.getGame().getServer().getPlayer(playerName).isPresent())) {
 				src.sendMessage(Text.of(TextColors.DARK_RED, playerName, " is offline."));
-				Main.getReply().remove(src.getName());
+				getReply().remove(src.getName());
 				return CommandResult.empty();
 			}
 			recipient = Main.getGame().getServer().getPlayer(playerName).get();
@@ -62,10 +66,14 @@ public class CMDReply implements CommandExecutor {
 			Main.getGame().getServer().getConsole().sendMessage(message);
 		}
 		
-        Main.getReply().remove(src.getName());
-        Main.getReply().put(recipient.getName(), src.getName());
+        getReply().remove(src.getName());
+        getReply().put(recipient.getName(), src.getName());
         
 		return CommandResult.success();
+	}
+	
+	public static HashMap<String, String> getReply() {
+		return reply;
 	}
 
 }

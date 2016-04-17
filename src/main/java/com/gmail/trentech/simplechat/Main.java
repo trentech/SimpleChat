@@ -2,7 +2,6 @@ package com.gmail.trentech.simplechat;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
@@ -33,8 +32,6 @@ public class Main {
 	private static Logger log;
 	private static PluginContainer plugin;
 
-	private static HashMap<String, String> reply = new HashMap<String, String>();
-	
 	@Listener
     public void onPreInitializationEvent(GamePreInitializationEvent event) {
 		game = Sponge.getGame();
@@ -73,10 +70,6 @@ public class Main {
 		return plugin;
 	}
 
-	public static HashMap<String, String> getReply() {
-		return reply;
-	}
-	
 	public static Text processText(String msg){
     	Text message = Text.EMPTY;
 
