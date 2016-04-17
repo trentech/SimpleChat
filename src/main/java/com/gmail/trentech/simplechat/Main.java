@@ -96,10 +96,16 @@ public class Main {
     private static Text getLink(String link){
     	Text.Builder builder = Text.builder();
     	String[] work = link.split(";");
+    	
+    	if(work.length != 3){
+    		return Text.of(TextColors.RED, "Invalid TextAction detected");
+    	}
+    	
 		if(work[0].equalsIgnoreCase("url")){
 			if(!work[1].toLowerCase().contains("http://") && !work[1].toLowerCase().contains("https://")){
 				work[1] = "http://" + work[1];	
 			}
+			
 			URL url = null;
 			try {
 				url = new URL(work[1]);
@@ -113,7 +119,10 @@ public class Main {
 			builder.onClick(TextActions.suggestCommand(work[1])).append(TextSerializers.FORMATTING_CODE.deserialize(work[2]));
 		}else if(work[0].equalsIgnoreCase("hover")){
 			builder.onHover(TextActions.showText(TextSerializers.FORMATTING_CODE.deserialize(work[1]))).append(TextSerializers.FORMATTING_CODE.deserialize(work[2]));
+		}else{
+			return Text.of(TextColors.RED, "Invalid TextAction detected");
 		}
+		
 		return builder.build();
     }
 }
