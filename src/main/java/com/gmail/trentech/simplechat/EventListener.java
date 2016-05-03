@@ -2,9 +2,11 @@ package com.gmail.trentech.simplechat;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.message.MessageChannelEvent;
 import org.spongepowered.api.event.message.MessageEvent.MessageFormatter;
@@ -59,9 +61,14 @@ public class EventListener {
     	}
 	}
 	
-	@Listener
+	@Listener(order = Order.FIRST)
 	public void MessageChannelEventChat(MessageChannelEvent.Chat event, @First Player player){
-		MutableMessageChannel channel = MessageChannel.TO_ALL.asMutable();
+		Optional<MessageChannel> optionalChannel = event.getChannel();
+		
+		if(!optionalChannel.isPresent()){
+			return;
+		}
+		MutableMessageChannel channel = optionalChannel.get().asMutable();
 
 		ConfigurationNode config = new ConfigManager().getConfig();	
 
@@ -87,14 +94,8 @@ public class EventListener {
     				Player recipient = (Player) src;
     				
     				int range = config.getNode("Options", "Ranged-Chat", "Range").getInt();
-			
-    				double playerX = player.getLocation().getX();
-    				double playerZ = player.getLocation().getZ();
 
-    				double recipientX = recipient.getLocation().getX();
-    				double recipientZ = recipient.getLocation().getZ();
-    				
-    				double distance = Math.sqrt((recipientX-playerX)*(recipientX-playerX) + (recipientZ-playerZ)*(recipientZ-playerZ));
+    				double distance = player.getLocation().getPosition().distance(recipient.getLocation().getPosition());
 
     				if(distance > range){
     					channel.removeMember(src);
