@@ -34,7 +34,7 @@ public class CMDSnoop implements CommandExecutor {
 		ConfigurationNode config = configManager.getConfig();
 		
 		if(bool.equalsIgnoreCase("true")){
-			config.getNode("Options", "PM-Snoop").setValue(true);
+			config.getNode("options", "pm_snoop").setValue(true);
 
 			configManager.save();
 			
@@ -42,7 +42,7 @@ public class CMDSnoop implements CommandExecutor {
 			
 			return CommandResult.success();
 		}else if(bool.equalsIgnoreCase("false")){
-			config.getNode("Options", "PM-Snoop").setValue(false);
+			config.getNode("options", "pm_snoop").setValue(false);
 
 			configManager.save();
 			

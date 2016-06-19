@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.service.sql.SqlService;
 
-import com.gmail.trentech.simpletags.Main;
+import com.gmail.trentech.simplechat.Main;
 
 public abstract class SQLUtils {
 

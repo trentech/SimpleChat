@@ -21,8 +21,8 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.simplechat.Main;
+import com.gmail.trentech.simplechat.data.Message;
 import com.gmail.trentech.simplechat.utils.Help;
-import com.gmail.trentech.simplechat.utils.Message;
 
 public class CMDMail implements CommandExecutor {
 

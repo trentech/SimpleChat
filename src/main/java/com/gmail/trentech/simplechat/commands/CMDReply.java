@@ -55,14 +55,14 @@ public class CMDReply implements CommandExecutor {
 		
 		String messagePlain = args.<String>getOne("message").get();
 		
-		Text message = Text.of(TextColors.GOLD, "[", src.getName(), "] --> [", recipient.getName(), "]", TextColors.WHITE, ": ", Main.processText(messagePlain));
+		Text message = Text.of(TextColors.GOLD, "[", src.getName(), "] --> [", recipient.getName(), "]", TextColors.WHITE, " ", Main.processText(messagePlain));
 
 		recipient.sendMessage(message);
 		src.sendMessage(message);
         
 		ConfigurationNode config = new ConfigManager().getConfig();
 		
-		if(config.getNode("Options", "PM-Snoop").getBoolean() && (!(recipient instanceof ConsoleSource || src instanceof ConsoleSource))){
+		if(config.getNode("options", "pm_snoop").getBoolean() && (!(recipient instanceof ConsoleSource || src instanceof ConsoleSource))){
 			Main.getGame().getServer().getConsole().sendMessage(message);
 		}
 		

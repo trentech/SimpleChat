@@ -41,14 +41,14 @@ public class CMDRange implements CommandExecutor {
 		if(args.hasAny("value")) {
 			String value = args.<String>getOne("value").get();
 			try{
-				config.getNode("Options", "Ranged-Chat", "Range").setValue(Integer.parseInt(value));
+				config.getNode("options", "ranged_chat", "range").setValue(Integer.parseInt(value));
 			}catch(Exception e){
 				src.sendMessage(Text.of(TextColors.DARK_RED, value, " is not a valid value"));
 				return CommandResult.empty();
 			}			
 		}
 		
-		config.getNode("Options", "Ranged-Chat", "Enable").setValue(Boolean.parseBoolean(bool));
+		config.getNode("options", "ranged_chat", "enable").setValue(Boolean.parseBoolean(bool));
 		
 		configManager.save();
 		

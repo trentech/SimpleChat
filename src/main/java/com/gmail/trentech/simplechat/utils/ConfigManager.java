@@ -2,8 +2,6 @@ package com.gmail.trentech.simplechat.utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.gmail.trentech.simplechat.Main;
 
@@ -26,7 +24,6 @@ public class ConfigManager {
 		
 		create();
 		load();
-		init();
 	}
 	
 	public ConfigManager() {
@@ -38,7 +35,6 @@ public class ConfigManager {
 		
 		create();
 		load();
-		init();
 	}
 	
 	public ConfigurationLoader<CommentedConfigurationNode> getLoader() {
@@ -58,34 +54,17 @@ public class ConfigManager {
 		}
 	}
 	
-	private void init() {
+	public void init() {
 		if(file.getName().equalsIgnoreCase("config.conf")){
-	        if(config.getNode("Options", "PM-Snoop").isVirtual()) {
-	        	config.getNode("Options", "PM-Snoop").setValue(false);
+	        if(config.getNode("options", "pm_snoop").isVirtual()) {
+	        	config.getNode("options", "pm_snoop").setValue(false);
 	        }
-	        if(config.getNode("Options", "World-Chat").isVirtual()) {
-	        	config.getNode("Options", "World-Chat").setValue(false);
+	        if(config.getNode("options", "world_chat").isVirtual()) {
+	        	config.getNode("options", "world_chat").setValue(false);
 	        }
-	        if(config.getNode("Options", "Ranged-Chat", "Enable").isVirtual()) {
-	        	config.getNode("Options", "Ranged-Chat", "Enable").setValue(false);
-	        	config.getNode("Options", "Ranged-Chat", "Range").setValue(32);
-	        }
-
-	        if(config.getNode("Broadcast", "Enable").isVirtual()) {
-	        	config.getNode("Broadcast", "Enable").setValue(false);
-	        	config.getNode("Broadcast", "Minutes").setValue(1);
-	        		        	
-	        	List<String> list = new ArrayList<String>(); 
-	        	
-	        	list.add("&eWelcome to &5SERVER NAME&e! This is an auto broacast!");
-	        	list.add("&eBreak stone blocks with a pickaxe!");
-	        	list.add("&eYou can delete these message and create your own!");
-	        	list.add("&eCreate clickable link &u{url;www.google.com;&1Click Here}&e like so");
-	        	list.add("&eCreate clickable command &u{cmd;/say hello world;&1Click Here}&e like so");
-	        	list.add("&eCreate clickable suggested command &u{suggest;/say hello world;&1Click Here}&e like so");
-	        	list.add("&eCreate hovered text &u{hover;&3secret text;&1Hover Here}&e like so");
-	        	
-	        	config.getNode("Broadcast", "Messages").setValue(list);     	
+	        if(config.getNode("options", "ranged_chat", "enable").isVirtual()) {
+	        	config.getNode("options", "ranged_chat", "enable").setValue(false);
+	        	config.getNode("options", "ranged_chat", "range").setValue(32);
 	        }
 		}
 		save();

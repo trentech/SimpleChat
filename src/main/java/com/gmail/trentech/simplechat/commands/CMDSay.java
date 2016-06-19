@@ -11,7 +11,6 @@ import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.simplechat.Main;
 import com.gmail.trentech.simplechat.utils.Help;
-import com.gmail.trentech.simpletags.tags.ConsoleTag;
 
 public class CMDSay implements CommandExecutor {
 
@@ -32,7 +31,7 @@ public class CMDSay implements CommandExecutor {
 		
 		MessageChannel channel = MessageChannel.TO_ALL;
 
-		channel.send(Text.of(ConsoleTag.get().get().getTag(), TextColors.WHITE, ": ", Main.processText(message)));	
+		channel.send(Text.of(TextColors.GOLD, "[", src.getName(), "]", TextColors.WHITE, " ", Main.processText(message)));	
 
 		return CommandResult.success();
 	}

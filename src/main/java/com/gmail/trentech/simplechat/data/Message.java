@@ -1,4 +1,4 @@
-package com.gmail.trentech.simplechat.utils;
+package com.gmail.trentech.simplechat.data;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,6 +12,7 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 
 import com.gmail.trentech.simplechat.Main;
+import com.gmail.trentech.simplechat.utils.SQLUtils;
 
 public class Message extends SQLUtils{
 

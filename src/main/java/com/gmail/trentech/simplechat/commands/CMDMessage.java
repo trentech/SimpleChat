@@ -13,9 +13,9 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.simplechat.Main;
+import com.gmail.trentech.simplechat.data.Mute;
 import com.gmail.trentech.simplechat.utils.ConfigManager;
 import com.gmail.trentech.simplechat.utils.Help;
-import com.gmail.trentech.simplechat.utils.Mute;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -40,10 +40,12 @@ public class CMDMessage implements CommandExecutor {
 		
 		if(!optionalPlayer.isPresent()) {
 			CMDReply.getReply().remove(src.getName());
+			
 			if(!playerName.equalsIgnoreCase("Server")){
 				src.sendMessage(Text.of(TextColors.DARK_RED, playerName, " is offline."));
 				return CommandResult.empty();
 			}
+			
 			src.sendMessage(Text.of(TextColors.DARK_RED, "You cannot message the console directly, but can reply to message from."));
 			return CommandResult.empty();
 		}
@@ -60,14 +62,14 @@ public class CMDMessage implements CommandExecutor {
 		}
 		String messagePlain = args.<String>getOne("message").get();
 		
-		Text message = Text.of(TextColors.GOLD, "[", src.getName(), "] --> [", player.getName(), "]", TextColors.WHITE, ": ", Main.processText(messagePlain));
+		Text message = Text.of(TextColors.GOLD, "[", src.getName(), "] --> [", player.getName(), "]", TextColors.WHITE, " ", Main.processText(messagePlain));
 
 		player.sendMessage(message);
 		src.sendMessage(message);
 
 		ConfigurationNode config = new ConfigManager().getConfig();
 
-		if(config.getNode("Options", "PM-Snoop").getBoolean() && (!(src instanceof ConsoleSource))){
+		if(config.getNode("options", "pm_snoop").getBoolean() && (!(src instanceof ConsoleSource))){
 			Main.getGame().getServer().getConsole().sendMessage(message);
 		}
 		

@@ -1,4 +1,4 @@
-package com.gmail.trentech.simplechat.utils;
+package com.gmail.trentech.simplechat.data;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.spongepowered.api.entity.living.player.Player;
+
+import com.gmail.trentech.simplechat.utils.SQLUtils;
 
 public class Mute extends SQLUtils {
 

@@ -8,6 +8,7 @@ import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
+import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
@@ -18,14 +19,18 @@ import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 import com.gmail.trentech.simplechat.commands.CommandManager;
-import com.gmail.trentech.simplechat.utils.Broadcast;
+import com.gmail.trentech.simplechat.commands.channel.CMDTagChannel;
+import com.gmail.trentech.simplechat.data.ChannelTag;
+import com.gmail.trentech.simplechat.listeners.EventListener;
+import com.gmail.trentech.simplechat.listeners.TagListener;
+import com.gmail.trentech.simplechat.utils.ConfigManager;
 import com.gmail.trentech.simplechat.utils.Resource;
 import com.gmail.trentech.simplechat.utils.SQLUtils;
 
 import me.flibio.updatifier.Updatifier;
 
 @Updatifier(repoName = "SimpleChat", repoOwner = "TrenTech", version = Resource.VERSION)
-@Plugin(id = Resource.ID, name = Resource.NAME, authors = Resource.AUTHOR, url = Resource.URL, dependencies = {@Dependency(id = "Updatifier", optional = true), @Dependency(id = "com.gmail.trentech.simpletags", version = "0.2.5")})
+@Plugin(id = Resource.ID, name = Resource.NAME, authors = Resource.AUTHOR, url = Resource.URL, dependencies = {@Dependency(id = "Updatifier", optional = true), @Dependency(id = "com.gmail.trentech.simpletags", version = "0.3.0", optional = true)})
 public class Main {
 
 	private static Game game;
@@ -41,23 +46,37 @@ public class Main {
 
 	@Listener
 	public void onInitializationEvent(GameInitializationEvent event) {
-		getGame().getEventManager().registerListeners(this, new EventListener());
+		new ConfigManager().init();
 		
-		getGame().getCommandManager().register(this, new CommandManager().cmdBroadcast, "broadcast", "b");
-		getGame().getCommandManager().register(this, new CommandManager().cmdChannel, "channel", "ch");
-		getGame().getCommandManager().register(this, new CommandManager().cmdChat, "chat", "cm");
-		getGame().getCommandManager().register(this, new CommandManager().cmdGlobal, "global", "g");
-		getGame().getCommandManager().register(this, new CommandManager().cmdMail, "mail", "ml");
-		getGame().getCommandManager().register(this, new CommandManager().cmdMessage, "message", "msg");
-		getGame().getCommandManager().register(this, new CommandManager().cmdMute, "mute", "m");
-		getGame().getCommandManager().register(this, new CommandManager().cmdReply, "reply", "r");
-		getGame().getCommandManager().register(this, new CommandManager().cmdSay, "say", "s");
+		getGame().getEventManager().registerListeners(this, new EventListener());
 
-		Broadcast.init();
+		CommandManager commandManager = new CommandManager();
+		
+		getGame().getCommandManager().register(this, commandManager.cmdChannel, "channel", "ch");
+		getGame().getCommandManager().register(this, commandManager.cmdChat, "chat", "cm");
+		getGame().getCommandManager().register(this, commandManager.cmdMail, "mail", "ml");
+		getGame().getCommandManager().register(this, commandManager.cmdMessage, "message", "msg");
+		getGame().getCommandManager().register(this, commandManager.cmdMute, "mute", "m");
+		getGame().getCommandManager().register(this, commandManager.cmdReply, "reply", "r");
+		getGame().getCommandManager().register(this, commandManager.cmdSay, "say", "s");
 
 		SQLUtils.createTable();
+		
+		if(Main.getGame().getPluginManager().isLoaded("com.gmail.trentech.simpletags")) {
+			getGame().getEventManager().registerListeners(this, new TagListener());
+			
+			com.gmail.trentech.simpletags.Main.registerTag(ChannelTag.class);
+			com.gmail.trentech.simpletags.Main.registerCommand(CMDTagChannel.cmd, "channel", "ch");
+		}
 	}
 
+	@Listener
+	public void onPostInitializationEvent(GamePostInitializationEvent event) {
+		if(Main.getGame().getPluginManager().isLoaded("com.gmail.trentech.simpletags")) {
+			ChannelTag.init();
+		}
+	}
+	
 	public static Game getGame() {
 		return game;
 	}

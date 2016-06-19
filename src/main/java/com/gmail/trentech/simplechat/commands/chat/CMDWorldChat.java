@@ -34,7 +34,7 @@ public class CMDWorldChat implements CommandExecutor {
 		ConfigurationNode config = configManager.getConfig();
 		
 		if(bool.equalsIgnoreCase("true")){
-			config.getNode("Options", "World-Chat").setValue(true);
+			config.getNode("options", "world_chat").setValue(true);
 
 			configManager.save();
 			
@@ -42,7 +42,7 @@ public class CMDWorldChat implements CommandExecutor {
 			
 			return CommandResult.success();
 		}else if(bool.equalsIgnoreCase("false")){
-			config.getNode("Options", "World-Chat").setValue(false);
+			config.getNode("options", "world_chat").setValue(false);
 
 			configManager.save();
 			
