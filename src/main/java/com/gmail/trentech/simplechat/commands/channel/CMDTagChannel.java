@@ -24,74 +24,72 @@ import com.gmail.trentech.simpletags.utils.Help;
 
 public class CMDTagChannel implements CommandExecutor {
 
-	public static CommandSpec cmd = CommandSpec.builder().permission("simpletags.cmd.tag.channel")	    
-		    .arguments(GenericArguments.optional(GenericArguments.string(Text.of("name"))), GenericArguments.optional(GenericArguments.string(Text.of("tag"))))
-		    .executor(new CMDTagChannel()).build();
-	
-	public CMDTagChannel(){
+	public static CommandSpec cmd = CommandSpec.builder().permission("simpletags.cmd.tag.channel").arguments(GenericArguments.optional(GenericArguments.string(Text.of("name"))), GenericArguments.optional(GenericArguments.string(Text.of("tag")))).executor(new CMDTagChannel()).build();
+
+	public CMDTagChannel() {
 		Help help = new Help("channel", "channel", " View and edit channel tags");
 		help.setSyntax(" /tag channel <channel> <tag>\n /t g <channel> <tag>");
 		help.setExample(" /tag channel private\n /tag channel private &e[private]\n /tag channel private reset");
 		help.save();
 	}
-	
+
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		if(!args.hasAny("name")) {
+		if (!args.hasAny("name")) {
 			src.sendMessage(Text.of(TextColors.YELLOW, "/tag channel <channel> <tag>"));
 			return CommandResult.empty();
 		}
-		String name = args.<String>getOne("name").get();
+		String name = args.<String> getOne("name").get();
 
-    	Optional<ChannelTag> optionalChannelTag = ChannelTag.get(name);
-    	
-		if(!args.hasAny("tag")) {
+		Optional<ChannelTag> optionalChannelTag = ChannelTag.get(name);
+
+		if (!args.hasAny("tag")) {
 			List<Text> list = new ArrayList<>();
 
-			if(optionalChannelTag.isPresent()){
-				list.add(Text.of(TextColors.GREEN, "Current Tag: ", TextColors.RESET, optionalChannelTag.get().getTag()));	
-			}else{
+			if (optionalChannelTag.isPresent()) {
+				list.add(Text.of(TextColors.GREEN, "Current Tag: ", TextColors.RESET, optionalChannelTag.get().getTag()));
+			} else {
 				list.add(Text.of(TextColors.GREEN, "Current Tag: ", TextColors.RED, "NONE"));
 			}
-			
+
 			list.add(Text.of(TextColors.GREEN, "Update Tag: ", TextColors.YELLOW, "/tag channel <channel> <tag>"));
-			
-			if(src instanceof Player) {
+
+			if (src instanceof Player) {
 				Builder pages = Main.getGame().getServiceManager().provide(PaginationService.class).get().builder();
 
 				pages.title(Text.builder().color(TextColors.DARK_GREEN).append(Text.of(TextColors.GREEN, "Channel")).build());
-				
+
 				pages.contents(list);
-				
+
 				pages.sendTo(src);
-			}else {
-				for(Text text : list) {
+			} else {
+				for (Text text : list) {
 					src.sendMessage(text);
 				}
 			}
 
 			return CommandResult.success();
 		}
-		String tag = args.<String>getOne("tag").get();
-    	
-		if(tag.equalsIgnoreCase("reset")){
-			if(optionalChannelTag.isPresent()){
+		String tag = args.<String> getOne("tag").get();
+
+		if (tag.equalsIgnoreCase("reset")) {
+			if (optionalChannelTag.isPresent()) {
 				optionalChannelTag.get().setTag(null);
 			}
 			src.sendMessage(Text.of(TextColors.DARK_GREEN, "Tag reset"));
-			
+
 			return CommandResult.success();
 		}
-		
-		if(optionalChannelTag.isPresent()){
+
+		if (optionalChannelTag.isPresent()) {
 			ChannelTag channelTag = optionalChannelTag.get();
 			channelTag.setTag(tag);
-		}else{
+		} else {
 			ChannelTag.create(name, tag);
 		}
 
 		src.sendMessage(Text.of(TextColors.DARK_GREEN, "Tag changed to ", TextSerializers.FORMATTING_CODE.deserialize(tag)));
-		
+
 		return CommandResult.success();
 	}
 

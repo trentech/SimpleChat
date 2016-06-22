@@ -26,68 +26,68 @@ import com.gmail.trentech.simplechat.utils.Help;
 
 public class CMDMail implements CommandExecutor {
 
-	public CMDMail(){
+	public CMDMail() {
 		Help help = new Help("mail", "mail", " Sender messages to offline players");
 		help.setSyntax(" /mail <player> <message>\n /ml <player> <message>");
 		help.setExample(" /mail\n /mail Notch I destroyed your house...sorry");
 		help.save();
 	}
-	
+
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		if(!(src instanceof Player)){
+		if (!(src instanceof Player)) {
 			src.sendMessage(Text.of(TextColors.DARK_RED, "Players only..for now!"));
 			return CommandResult.empty();
-		}	
+		}
 		Player player = (Player) src;
-		
-		if(!args.hasAny("player")){
+
+		if (!args.hasAny("player")) {
 			PaginationList.Builder pageBuilder = Main.getGame().getServiceManager().provide(PaginationService.class).get().builder();
-			
+
 			pageBuilder.title(Text.builder().color(TextColors.DARK_GREEN).append(Text.of(TextColors.GREEN, "Mail")).build());
 
 			LinkedList<Message> messages = Message.all(player);
 			List<Text> pages = new ArrayList<>();
 
-			if(messages.isEmpty()){
+			if (messages.isEmpty()) {
 				pages.add(Text.of(TextColors.YELLOW, " No messages :)"));
-			}else{
+			} else {
 
-				for(Message msg : messages){
+				for (Message msg : messages) {
 					Text from = Text.of(TextColors.GOLD, "[", msg.getFrom(), "]");
 					Text message = msg.getMessage();
 
 					Builder builder = Text.builder().color(TextColors.RED).onHover(TextActions.showText(Text.of("Click to delete message")));
 					builder.onClick(TextActions.executeCallback(processDelete(msg.getUuid()))).append(Text.of("[Delete]"));
-					
+
 					pages.add(Text.of(builder.build(), from, TextColors.WHITE, ": ", message));
-					
+
 					msg.setRead(true);
 				}
 			}
 			Builder builder = Text.builder().onHover(TextActions.showText(Text.of("Click to delete all messages")));
-			
+
 			builder.onClick(TextActions.executeCallback(processDeleteAll())).append(Text.of(TextColors.RED, "[Empty]"));
 
 			pages.add(Text.of(TextColors.YELLOW, "\n/mail <player> <message>                                       ", builder.build()));
-			
+
 			pageBuilder.contents(pages);
-			
+
 			pageBuilder.sendTo(player);
 
-			return CommandResult.success();	
+			return CommandResult.success();
 		}
-		String playerName = args.<String>getOne("player").get();
-		
-		if(!args.hasAny("message")){
+		String playerName = args.<String> getOne("player").get();
+
+		if (!args.hasAny("message")) {
 			src.sendMessage(Text.of(TextColors.YELLOW, "/mail <player> <message>"));
 			return CommandResult.empty();
 		}
-		String msg = args.<String>getOne("message").get();
-		
+		String msg = args.<String> getOne("message").get();
+
 		UserStorageService userStorage = Main.getGame().getServiceManager().provide(UserStorageService.class).get();
 
-		if(!userStorage.get(playerName).isPresent()){
+		if (!userStorage.get(playerName).isPresent()) {
 			player.sendMessage(Text.of(TextColors.DARK_RED, playerName, " does not exist."));
 			return CommandResult.empty();
 		}
@@ -95,37 +95,37 @@ public class CMDMail implements CommandExecutor {
 
 		new Message(playerUuid, player.getName(), msg);
 
-        if(Main.getGame().getServer().getPlayer(playerName).isPresent()){
+		if (Main.getGame().getServer().getPlayer(playerName).isPresent()) {
 			Builder builder = Text.builder().color(TextColors.GREEN).append(Text.of("You have unread messages! /mail"));
 			builder.onClick(TextActions.runCommand("/mail"));
-            builder.onHover(TextActions.showText(Text.of("Click to open mailbox")));
+			builder.onHover(TextActions.showText(Text.of("Click to open mailbox")));
 
-        	Main.getGame().getServer().getPlayer(playerName).get().sendMessage(builder.build());	
-        }
+			Main.getGame().getServer().getPlayer(playerName).get().sendMessage(builder.build());
+		}
 
-		player.sendMessage(Text.of(TextColors.GREEN, "Message sent"));	
-		
+		player.sendMessage(Text.of(TextColors.GREEN, "Message sent"));
+
 		return CommandResult.success();
 	}
-	
-	private static Consumer<CommandSource> processDelete(String uuid){
+
+	private static Consumer<CommandSource> processDelete(String uuid) {
 		return (CommandSource src) -> {
 			Player player = (Player) src;
-			
+
 			Optional<Message> optionalMessage = Message.get(player, uuid);
-			
-			if(optionalMessage.isPresent()){
+
+			if (optionalMessage.isPresent()) {
 				optionalMessage.get().delete();
 				src.sendMessage(Text.of(TextColors.DARK_GREEN, "Message deleted"));
 			}
 		};
 	}
-	
-	private static Consumer<CommandSource> processDeleteAll(){
+
+	private static Consumer<CommandSource> processDeleteAll() {
 		return (CommandSource src) -> {
 			Player player = (Player) src;
 			LinkedList<Message> messages = Message.all(player);
-			for(Message message : messages){
+			for (Message message : messages) {
 				message.delete();
 			}
 

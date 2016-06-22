@@ -13,14 +13,14 @@ import com.gmail.trentech.simplechat.Main;
 
 public abstract class SQLUtils {
 
-    protected static SqlService sql;
+	protected static SqlService sql;
 
-    protected static DataSource getDataSource() throws SQLException {
-	    if (sql == null) {
-	        sql = Main.getGame().getServiceManager().provide(SqlService.class).get();
-	    }
-	    
-        return sql.getDataSource("jdbc:h2:./config/simplechat/chat");
+	protected static DataSource getDataSource() throws SQLException {
+		if (sql == null) {
+			sql = Main.getGame().getServiceManager().provide(SqlService.class).get();
+		}
+
+		return sql.getDataSource("jdbc:h2:./config/simplechat/chat");
 	}
 
 	public static void createTable() {
@@ -29,13 +29,13 @@ public abstract class SQLUtils {
 
 			PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS Players (Name TEXT, Players TEXT)");
 			statement.executeUpdate();
-			
+
 			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}	
+		}
 	}
-	
+
 	public static void createPlayerTable(Player player) {
 		String playerUuid = player.getUniqueId().toString();
 		try {
@@ -43,10 +43,10 @@ public abstract class SQLUtils {
 
 			PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `" + playerUuid + "` (Name TEXT, Sender TEXT, Message TEXT, Read BOOLEAN)");
 			statement.executeUpdate();
-			
+
 			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}	
+		}
 	}
 }

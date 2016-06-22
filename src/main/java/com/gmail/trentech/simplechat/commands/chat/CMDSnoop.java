@@ -15,44 +15,44 @@ import ninja.leaping.configurate.ConfigurationNode;
 
 public class CMDSnoop implements CommandExecutor {
 
-	public CMDSnoop(){
+	public CMDSnoop() {
 		Help help = new Help("snoop", "snoop", " Toggle on and off private message snooping");
 		help.setSyntax(" /chat snoop <boolean>\n /c s <boolean>");
 		help.setExample(" /chat snoop true");
 		help.save();
 	}
-	
+
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		if(!args.hasAny("boolean")) {
+		if (!args.hasAny("boolean")) {
 			src.sendMessage(Text.of(TextColors.YELLOW, "/chat snoop <boolean>"));
 			return CommandResult.empty();
 		}
-		String bool = args.<String>getOne("boolean").get();
-		
+		String bool = args.<String> getOne("boolean").get();
+
 		ConfigManager configManager = new ConfigManager();
 		ConfigurationNode config = configManager.getConfig();
-		
-		if(bool.equalsIgnoreCase("true")){
+
+		if (bool.equalsIgnoreCase("true")) {
 			config.getNode("options", "pm_snoop").setValue(true);
 
 			configManager.save();
-			
+
 			src.sendMessage(Text.of(TextColors.DARK_GREEN, "Private snooping enabled"));
-			
+
 			return CommandResult.success();
-		}else if(bool.equalsIgnoreCase("false")){
+		} else if (bool.equalsIgnoreCase("false")) {
 			config.getNode("options", "pm_snoop").setValue(false);
 
 			configManager.save();
-			
+
 			src.sendMessage(Text.of(TextColors.DARK_GREEN, "Private snooping disabled"));
-			
+
 			return CommandResult.success();
 		}
-		
+
 		src.sendMessage(Text.of(TextColors.DARK_RED, "true or false"));
-		
+
 		return CommandResult.empty();
 	}
 

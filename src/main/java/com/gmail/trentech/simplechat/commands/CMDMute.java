@@ -17,46 +17,46 @@ import com.gmail.trentech.simplechat.utils.Help;
 
 public class CMDMute implements CommandExecutor {
 
-	public CMDMute(){
+	public CMDMute() {
 		Help help = new Help("mute", "mute", " Mutes player from sending you any kind of message, public or private");
 		help.setSyntax(" /mute <player>\n /m <player>");
 		help.setExample(" /mute Notch");
 		help.save();
 	}
-	
+
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		if(!args.hasAny("player")) {
+		if (!args.hasAny("player")) {
 			src.sendMessage(Text.of(TextColors.YELLOW, "/mute <player>"));
 			return CommandResult.empty();
 		}
 		Player player = (Player) src;
-		
-		String playerName = args.<String>getOne("player").get();
-		
+
+		String playerName = args.<String> getOne("player").get();
+
 		Optional<Player> optionalPlayer = Main.getGame().getServer().getPlayer(playerName);
-		
-		if(!optionalPlayer.isPresent()){
+
+		if (!optionalPlayer.isPresent()) {
 			src.sendMessage(Text.of(TextColors.DARK_RED, playerName, " does not exist"));
 			return CommandResult.empty();
 		}
 		Player target = optionalPlayer.get();
-		
-		if(target.hasPermission("simplechat.unmute")){
+
+		if (target.hasPermission("simplechat.unmute")) {
 			src.sendMessage(Text.of(TextColors.DARK_RED, "You cannot mute this player"));
 			return CommandResult.empty();
 		}
-		
+
 		Mute mute = Mute.get(player).get();
-		
-		if(mute.getPlayers().contains(target.getUniqueId().toString())){
+
+		if (mute.getPlayers().contains(target.getUniqueId().toString())) {
 			mute.removePlayer(target);
 			player.sendMessage(Text.of(TextColors.DARK_GREEN, playerName, " can now speak"));
-		}else{
+		} else {
 			mute.addPlayer(target);
 			player.sendMessage(Text.of(TextColors.DARK_GREEN, playerName, " has been muted"));
 		}
-		
+
 		return CommandResult.success();
 	}
 

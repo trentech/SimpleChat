@@ -14,24 +14,24 @@ import com.gmail.trentech.simplechat.utils.Help;
 
 public class CMDSay implements CommandExecutor {
 
-	public CMDSay(){
+	public CMDSay() {
 		Help help = new Help("say", "say", " Send a message to the server from the console");
 		help.setSyntax(" /say <message>\n /s <message>");
 		help.setExample(" /say Drop party coming soon");
 		help.save();
 	}
-	
+
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		if(!args.hasAny("message")){
+		if (!args.hasAny("message")) {
 			src.sendMessage(Text.of(TextColors.YELLOW, "/say <message>"));
 			return CommandResult.empty();
 		}
-		String message = args.<String>getOne("message").get();
-		
+		String message = args.<String> getOne("message").get();
+
 		MessageChannel channel = MessageChannel.TO_ALL;
 
-		channel.send(Text.of(TextColors.GOLD, "[", src.getName(), "]", TextColors.WHITE, " ", Main.processText(message)));	
+		channel.send(Text.of(TextColors.GOLD, "[", src.getName(), "]", TextColors.WHITE, " ", Main.processText(message)));
 
 		return CommandResult.success();
 	}

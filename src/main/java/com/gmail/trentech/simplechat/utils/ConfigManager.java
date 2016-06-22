@@ -14,29 +14,31 @@ public class ConfigManager {
 	private File file;
 	private CommentedConfigurationNode config;
 	private ConfigurationLoader<CommentedConfigurationNode> loader;
-	
+
 	public ConfigManager(String configName) {
 		String folder = "config" + File.separator + "simplechat";
-        if (!new File(folder).isDirectory()) {
-        	new File(folder).mkdirs();
-        }
-		file = new File(folder + configName);
 		
+		if (!new File(folder).isDirectory()) {
+			new File(folder).mkdirs();
+		}
+		file = new File(folder + configName);
+
 		create();
 		load();
 	}
-	
+
 	public ConfigManager() {
 		String folder = "config" + File.separator + "simplechat";
-        if (!new File(folder).isDirectory()) {
-        	new File(folder).mkdirs();
-        }
-		file = new File(folder, "config.conf");
 		
+		if (!new File(folder).isDirectory()) {
+			new File(folder).mkdirs();
+		}
+		file = new File(folder, "config.conf");
+
 		create();
 		load();
 	}
-	
+
 	public ConfigurationLoader<CommentedConfigurationNode> getLoader() {
 		return loader;
 	}
@@ -45,7 +47,7 @@ public class ConfigManager {
 		return config;
 	}
 
-	public void save(){
+	public void save() {
 		try {
 			loader.save(config);
 		} catch (IOException e) {
@@ -53,36 +55,36 @@ public class ConfigManager {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void init() {
-		if(file.getName().equalsIgnoreCase("config.conf")){
-	        if(config.getNode("options", "pm_snoop").isVirtual()) {
-	        	config.getNode("options", "pm_snoop").setValue(false);
-	        }
-	        if(config.getNode("options", "world_chat").isVirtual()) {
-	        	config.getNode("options", "world_chat").setValue(false);
-	        }
-	        if(config.getNode("options", "ranged_chat", "enable").isVirtual()) {
-	        	config.getNode("options", "ranged_chat", "enable").setValue(false);
-	        	config.getNode("options", "ranged_chat", "range").setValue(32);
-	        }
+		if (file.getName().equalsIgnoreCase("config.conf")) {
+			if (config.getNode("options", "pm_snoop").isVirtual()) {
+				config.getNode("options", "pm_snoop").setValue(false);
+			}
+			if (config.getNode("options", "world_chat").isVirtual()) {
+				config.getNode("options", "world_chat").setValue(false);
+			}
+			if (config.getNode("options", "ranged_chat", "enable").isVirtual()) {
+				config.getNode("options", "ranged_chat", "enable").setValue(false);
+				config.getNode("options", "ranged_chat", "range").setValue(32);
+			}
 		}
 		save();
 	}
 
-	private void create(){
-		if(!file.exists()) {
+	private void create() {
+		if (!file.exists()) {
 			try {
 				Main.getLog().info("Creating new " + file.getName() + " file...");
-				file.createNewFile();		
-			} catch (IOException e) {				
+				file.createNewFile();
+			} catch (IOException e) {
 				Main.getLog().error("Failed to create new config file");
 				e.printStackTrace();
 			}
 		}
 	}
-	
-	private void load(){
+
+	private void load() {
 		loader = HoconConfigurationLoader.builder().setFile(file).build();
 		try {
 			config = loader.load();

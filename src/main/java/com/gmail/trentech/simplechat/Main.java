@@ -30,7 +30,7 @@ import com.gmail.trentech.simplechat.utils.SQLUtils;
 import me.flibio.updatifier.Updatifier;
 
 @Updatifier(repoName = "SimpleChat", repoOwner = "TrenTech", version = Resource.VERSION)
-@Plugin(id = Resource.ID, name = Resource.NAME, authors = Resource.AUTHOR, url = Resource.URL, dependencies = {@Dependency(id = "Updatifier", optional = true), @Dependency(id = "com.gmail.trentech.simpletags", version = "0.3.0", optional = true)})
+@Plugin(id = Resource.ID, name = Resource.NAME, authors = Resource.AUTHOR, url = Resource.URL, dependencies = { @Dependency(id = "Updatifier", optional = true), @Dependency(id = "com.gmail.trentech.simpletags", version = "0.3.0", optional = true) })
 public class Main {
 
 	private static Game game;
@@ -38,7 +38,7 @@ public class Main {
 	private static PluginContainer plugin;
 
 	@Listener
-    public void onPreInitializationEvent(GamePreInitializationEvent event) {
+	public void onPreInitializationEvent(GamePreInitializationEvent event) {
 		game = Sponge.getGame();
 		plugin = getGame().getPluginManager().getPlugin(Resource.ID).get();
 		log = getPlugin().getLogger();
@@ -47,11 +47,11 @@ public class Main {
 	@Listener
 	public void onInitializationEvent(GameInitializationEvent event) {
 		new ConfigManager().init();
-		
+
 		getGame().getEventManager().registerListeners(this, new EventListener());
 
 		CommandManager commandManager = new CommandManager();
-		
+
 		getGame().getCommandManager().register(this, commandManager.cmdChannel, "channel", "ch");
 		getGame().getCommandManager().register(this, commandManager.cmdChat, "chat", "cm");
 		getGame().getCommandManager().register(this, commandManager.cmdMail, "mail", "ml");
@@ -61,10 +61,10 @@ public class Main {
 		getGame().getCommandManager().register(this, commandManager.cmdSay, "say", "s");
 
 		SQLUtils.createTable();
-		
-		if(Main.getGame().getPluginManager().isLoaded("com.gmail.trentech.simpletags")) {
+
+		if (Main.getGame().getPluginManager().isLoaded("com.gmail.trentech.simpletags")) {
 			getGame().getEventManager().registerListeners(this, new TagListener());
-			
+
 			com.gmail.trentech.simpletags.Main.registerTag(ChannelTag.class);
 			com.gmail.trentech.simpletags.Main.registerCommand(CMDTagChannel.cmd, "channel", "ch");
 		}
@@ -72,11 +72,11 @@ public class Main {
 
 	@Listener
 	public void onPostInitializationEvent(GamePostInitializationEvent event) {
-		if(Main.getGame().getPluginManager().isLoaded("com.gmail.trentech.simpletags")) {
+		if (Main.getGame().getPluginManager().isLoaded("com.gmail.trentech.simpletags")) {
 			ChannelTag.init();
 		}
 	}
-	
+
 	public static Game getGame() {
 		return game;
 	}
@@ -89,52 +89,52 @@ public class Main {
 		return plugin;
 	}
 
-	public static Text processText(String msg){
-    	Text message = Text.EMPTY;
+	public static Text processText(String msg) {
+		Text message = Text.EMPTY;
 
-    	while(msg.contains("&u")){
-    		message = Text.join(message, TextSerializers.FORMATTING_CODE.deserialize(msg.substring(0, msg.indexOf("&u{")).replace("&u{", "")));
+		while (msg.contains("&u")) {
+			message = Text.join(message, TextSerializers.FORMATTING_CODE.deserialize(msg.substring(0, msg.indexOf("&u{")).replace("&u{", "")));
 
-    		String work = msg.substring(msg.indexOf("&u{"), msg.indexOf("}")).replaceFirst("&u\\{", "").replaceFirst("}", "");
-		
-    		message = Text.join(message, getLink(work));
+			String work = msg.substring(msg.indexOf("&u{"), msg.indexOf("}")).replaceFirst("&u\\{", "").replaceFirst("}", "");
 
-    		msg = msg.substring(msg.indexOf("}"), msg.length()).replaceFirst("}", "");
-    	}
-    	
-    	return Text.of(message, TextSerializers.FORMATTING_CODE.deserialize(msg));
+			message = Text.join(message, getLink(work));
+
+			msg = msg.substring(msg.indexOf("}"), msg.length()).replaceFirst("}", "");
+		}
+
+		return Text.of(message, TextSerializers.FORMATTING_CODE.deserialize(msg));
 	}
-	
-    private static Text getLink(String link){
-    	Text.Builder builder = Text.builder();
-    	String[] work = link.split(";");
-    	
-    	if(work.length != 3){
-    		return Text.of(TextColors.RED, "Invalid TextAction detected");
-    	}
-    	
-		if(work[0].equalsIgnoreCase("url")){
-			if(!work[1].toLowerCase().contains("http://") && !work[1].toLowerCase().contains("https://")){
-				work[1] = "http://" + work[1];	
+
+	private static Text getLink(String link) {
+		Text.Builder builder = Text.builder();
+		String[] work = link.split(";");
+
+		if (work.length != 3) {
+			return Text.of(TextColors.RED, "Invalid TextAction detected");
+		}
+
+		if (work[0].equalsIgnoreCase("url")) {
+			if (!work[1].toLowerCase().contains("http://") && !work[1].toLowerCase().contains("https://")) {
+				work[1] = "http://" + work[1];
 			}
-			
+
 			URL url = null;
 			try {
 				url = new URL(work[1]);
-				builder.onClick(TextActions.openUrl(url)).append(TextSerializers.FORMATTING_CODE.deserialize(work[2]));					
+				builder.onClick(TextActions.openUrl(url)).append(TextSerializers.FORMATTING_CODE.deserialize(work[2]));
 			} catch (MalformedURLException e) {
 				return Text.of(TextColors.RED, "Invalid URL detected");
 			}
-		}else if(work[0].equalsIgnoreCase("cmd")){
-			builder.onClick(TextActions.runCommand(work[1])).append(TextSerializers.FORMATTING_CODE.deserialize(work[2]));							
-		}else if(work[0].equalsIgnoreCase("suggest")){
+		} else if (work[0].equalsIgnoreCase("cmd")) {
+			builder.onClick(TextActions.runCommand(work[1])).append(TextSerializers.FORMATTING_CODE.deserialize(work[2]));
+		} else if (work[0].equalsIgnoreCase("suggest")) {
 			builder.onClick(TextActions.suggestCommand(work[1])).append(TextSerializers.FORMATTING_CODE.deserialize(work[2]));
-		}else if(work[0].equalsIgnoreCase("hover")){
+		} else if (work[0].equalsIgnoreCase("hover")) {
 			builder.onHover(TextActions.showText(TextSerializers.FORMATTING_CODE.deserialize(work[1]))).append(TextSerializers.FORMATTING_CODE.deserialize(work[2]));
-		}else{
+		} else {
 			return Text.of(TextColors.RED, "Invalid TextAction detected");
 		}
-		
+
 		return builder.build();
-    }
+	}
 }

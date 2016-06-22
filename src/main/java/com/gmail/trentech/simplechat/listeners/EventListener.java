@@ -49,13 +49,13 @@ public class EventListener {
 			if (!message.isRead()) {
 				continue;
 			}
-			
+
 			Builder builder = Text.builder().color(TextColors.GREEN).append(Text.of("You have unread messages! /mail"));
 			builder.onClick(TextActions.runCommand("/mail"));
 			builder.onHover(TextActions.showText(Text.of("Click to open mailbox")));
 
 			player.sendMessage(builder.build());
-			
+
 			break;
 		}
 	}
@@ -70,24 +70,24 @@ public class EventListener {
 		MutableMessageChannel messageChannel = optionalChannel.get().asMutable();
 
 		MessageFormatter formatter = event.getFormatter();
-		
+
 		String channel = CMDChannel.hash.get(player.getUniqueId());
 
 		if (!channel.equalsIgnoreCase("global")) {
 			Text prefix;
-		
-			if(Main.getGame().getPluginManager().isLoaded("com.gmail.trentech.simpletags")) {
+
+			if (Main.getGame().getPluginManager().isLoaded("com.gmail.trentech.simpletags")) {
 				Optional<ChannelTag> optionalTag = ChannelTag.get(channel);
-				
-				if(optionalTag.isPresent()) {
+
+				if (optionalTag.isPresent()) {
 					prefix = Text.join(optionalTag.get().getTag(), formatter.getHeader().toText());
 					formatter.setHeader(TextTemplate.of(prefix));
 				}
-			}else {
+			} else {
 				prefix = Text.join(Text.of(TextColors.GRAY, "[", channel, "]"), formatter.getHeader().toText());
 				formatter.setHeader(TextTemplate.of(prefix));
 			}
-			
+
 			for (MessageReceiver src : Lists.newArrayList(messageChannel.getMembers())) {
 				if (src instanceof Player) {
 					Player recipient = (Player) src;
