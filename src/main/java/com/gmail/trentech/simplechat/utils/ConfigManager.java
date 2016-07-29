@@ -16,7 +16,7 @@ public class ConfigManager {
 	private ConfigurationLoader<CommentedConfigurationNode> loader;
 
 	public ConfigManager(String configName) {
-		String folder = "config" + File.separator + "simplechat";
+		String folder = "config" + File.separator + Resource.ID;
 		
 		if (!new File(folder).isDirectory()) {
 			new File(folder).mkdirs();
@@ -28,7 +28,7 @@ public class ConfigManager {
 	}
 
 	public ConfigManager() {
-		String folder = "config" + File.separator + "simplechat";
+		String folder = "config" + File.separator + Resource.ID;
 		
 		if (!new File(folder).isDirectory()) {
 			new File(folder).mkdirs();
