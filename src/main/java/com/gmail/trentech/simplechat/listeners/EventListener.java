@@ -3,6 +3,7 @@ package com.gmail.trentech.simplechat.listeners;
 import java.util.LinkedList;
 import java.util.Optional;
 
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
@@ -76,7 +77,7 @@ public class EventListener {
 		if (!channel.equalsIgnoreCase("global")) {
 			Text prefix;
 
-			if (Main.getGame().getPluginManager().isLoaded("com.gmail.trentech.simpletags")) {
+			if (Sponge.getPluginManager().isLoaded("com.gmail.trentech.simpletags")) {
 				Optional<ChannelTag> optionalTag = ChannelTag.get(channel);
 
 				if (optionalTag.isPresent()) {

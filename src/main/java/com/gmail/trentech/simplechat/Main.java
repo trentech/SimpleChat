@@ -4,7 +4,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.slf4j.Logger;
-import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
@@ -29,18 +28,16 @@ import com.gmail.trentech.simplechat.utils.SQLUtils;
 
 import me.flibio.updatifier.Updatifier;
 
-@Updatifier(repoName = "SimpleChat", repoOwner = "TrenTech", version = Resource.VERSION)
-@Plugin(id = Resource.ID, name = Resource.NAME, authors = Resource.AUTHOR, url = Resource.URL, dependencies = { @Dependency(id = "Updatifier", optional = true), @Dependency(id = "com.gmail.trentech.simpletags", version = "0.3.0", optional = true) })
+@Updatifier(repoName = Resource.NAME, repoOwner = Resource.AUTHOR, version = Resource.VERSION)
+@Plugin(id = Resource.ID, name = Resource.NAME, version = Resource.VERSION, description = Resource.DESCRIPTION, authors = Resource.AUTHOR, url = Resource.URL, dependencies = { @Dependency(id = "Updatifier", optional = true), @Dependency(id = "simpletags", version = "0.3.0", optional = true) })
 public class Main {
 
-	private static Game game;
 	private static Logger log;
 	private static PluginContainer plugin;
 
 	@Listener
 	public void onPreInitializationEvent(GamePreInitializationEvent event) {
-		game = Sponge.getGame();
-		plugin = getGame().getPluginManager().getPlugin(Resource.ID).get();
+		plugin = Sponge.getPluginManager().getPlugin(Resource.ID).get();
 		log = getPlugin().getLogger();
 	}
 
@@ -48,22 +45,22 @@ public class Main {
 	public void onInitializationEvent(GameInitializationEvent event) {
 		new ConfigManager().init();
 
-		getGame().getEventManager().registerListeners(this, new EventListener());
+		Sponge.getEventManager().registerListeners(this, new EventListener());
 
 		CommandManager commandManager = new CommandManager();
 
-		getGame().getCommandManager().register(this, commandManager.cmdChannel, "channel", "ch");
-		getGame().getCommandManager().register(this, commandManager.cmdChat, "chat", "cm");
-		getGame().getCommandManager().register(this, commandManager.cmdMail, "mail", "ml");
-		getGame().getCommandManager().register(this, commandManager.cmdMessage, "message", "msg");
-		getGame().getCommandManager().register(this, commandManager.cmdMute, "mute", "m");
-		getGame().getCommandManager().register(this, commandManager.cmdReply, "reply", "r");
-		getGame().getCommandManager().register(this, commandManager.cmdSay, "say", "s");
+		Sponge.getCommandManager().register(this, commandManager.cmdChannel, "channel", "ch");
+		Sponge.getCommandManager().register(this, commandManager.cmdChat, "chat", "cm");
+		Sponge.getCommandManager().register(this, commandManager.cmdMail, "mail", "ml");
+		Sponge.getCommandManager().register(this, commandManager.cmdMessage, "message", "msg");
+		Sponge.getCommandManager().register(this, commandManager.cmdMute, "mute", "m");
+		Sponge.getCommandManager().register(this, commandManager.cmdReply, "reply", "r");
+		Sponge.getCommandManager().register(this, commandManager.cmdSay, "say", "s");
 
 		SQLUtils.createTable();
 
-		if (Main.getGame().getPluginManager().isLoaded("com.gmail.trentech.simpletags")) {
-			getGame().getEventManager().registerListeners(this, new TagListener());
+		if (Sponge.getPluginManager().isLoaded("simpletags")) {
+			Sponge.getEventManager().registerListeners(this, new TagListener());
 
 			com.gmail.trentech.simpletags.Main.registerTag(ChannelTag.class);
 			com.gmail.trentech.simpletags.Main.registerCommand(CMDTagChannel.cmd, "channel", "ch");
@@ -72,13 +69,9 @@ public class Main {
 
 	@Listener
 	public void onPostInitializationEvent(GamePostInitializationEvent event) {
-		if (Main.getGame().getPluginManager().isLoaded("com.gmail.trentech.simpletags")) {
+		if (Sponge.getPluginManager().isLoaded("simpletags")) {
 			ChannelTag.init();
 		}
-	}
-
-	public static Game getGame() {
-		return game;
 	}
 
 	public static Logger getLog() {

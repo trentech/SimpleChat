@@ -2,6 +2,7 @@ package com.gmail.trentech.simplechat.commands;
 
 import java.util.Optional;
 
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -36,7 +37,7 @@ public class CMDMessage implements CommandExecutor {
 		}
 		String playerName = args.<String> getOne("playerName").get();
 
-		Optional<Player> optionalPlayer = Main.getGame().getServer().getPlayer(playerName);
+		Optional<Player> optionalPlayer = Sponge.getServer().getPlayer(playerName);
 
 		if (!optionalPlayer.isPresent()) {
 			CMDReply.getReply().remove(src.getName());
@@ -70,7 +71,7 @@ public class CMDMessage implements CommandExecutor {
 		ConfigurationNode config = new ConfigManager().getConfig();
 
 		if (config.getNode("options", "pm_snoop").getBoolean() && (!(src instanceof ConsoleSource))) {
-			Main.getGame().getServer().getConsole().sendMessage(message);
+			Sponge.getServer().getConsole().sendMessage(message);
 		}
 
 		CMDReply.getReply().put(player.getName(), src.getName());

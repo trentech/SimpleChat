@@ -2,6 +2,7 @@ package com.gmail.trentech.simplechat.commands;
 
 import java.util.HashMap;
 
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -38,14 +39,14 @@ public class CMDReply implements CommandExecutor {
 
 		CommandSource recipient;
 		if (!playerName.equalsIgnoreCase("Server")) {
-			if (!(Main.getGame().getServer().getPlayer(playerName).isPresent())) {
+			if (!(Sponge.getServer().getPlayer(playerName).isPresent())) {
 				src.sendMessage(Text.of(TextColors.DARK_RED, playerName, " is offline."));
 				getReply().remove(src.getName());
 				return CommandResult.empty();
 			}
-			recipient = Main.getGame().getServer().getPlayer(playerName).get();
+			recipient = Sponge.getServer().getPlayer(playerName).get();
 		} else {
-			recipient = Main.getGame().getServer().getConsole();
+			recipient = Sponge.getServer().getConsole();
 		}
 
 		if (!args.hasAny("message")) {
@@ -63,7 +64,7 @@ public class CMDReply implements CommandExecutor {
 		ConfigurationNode config = new ConfigManager().getConfig();
 
 		if (config.getNode("options", "pm_snoop").getBoolean() && (!(recipient instanceof ConsoleSource || src instanceof ConsoleSource))) {
-			Main.getGame().getServer().getConsole().sendMessage(message);
+			Sponge.getServer().getConsole().sendMessage(message);
 		}
 
 		getReply().remove(src.getName());

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -20,7 +21,6 @@ import org.spongepowered.api.text.Text.Builder;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
-import com.gmail.trentech.simplechat.Main;
 import com.gmail.trentech.simplechat.data.Message;
 import com.gmail.trentech.simplechat.utils.Help;
 
@@ -42,7 +42,7 @@ public class CMDMail implements CommandExecutor {
 		Player player = (Player) src;
 
 		if (!args.hasAny("player")) {
-			PaginationList.Builder pageBuilder = Main.getGame().getServiceManager().provide(PaginationService.class).get().builder();
+			PaginationList.Builder pageBuilder = Sponge.getServiceManager().provide(PaginationService.class).get().builder();
 
 			pageBuilder.title(Text.builder().color(TextColors.DARK_GREEN).append(Text.of(TextColors.GREEN, "Mail")).build());
 
@@ -85,7 +85,7 @@ public class CMDMail implements CommandExecutor {
 		}
 		String msg = args.<String> getOne("message").get();
 
-		UserStorageService userStorage = Main.getGame().getServiceManager().provide(UserStorageService.class).get();
+		UserStorageService userStorage = Sponge.getServiceManager().provide(UserStorageService.class).get();
 
 		if (!userStorage.get(playerName).isPresent()) {
 			player.sendMessage(Text.of(TextColors.DARK_RED, playerName, " does not exist."));
@@ -95,12 +95,12 @@ public class CMDMail implements CommandExecutor {
 
 		new Message(playerUuid, player.getName(), msg);
 
-		if (Main.getGame().getServer().getPlayer(playerName).isPresent()) {
+		if (Sponge.getServer().getPlayer(playerName).isPresent()) {
 			Builder builder = Text.builder().color(TextColors.GREEN).append(Text.of("You have unread messages! /mail"));
 			builder.onClick(TextActions.runCommand("/mail"));
 			builder.onHover(TextActions.showText(Text.of("Click to open mailbox")));
 
-			Main.getGame().getServer().getPlayer(playerName).get().sendMessage(builder.build());
+			Sponge.getServer().getPlayer(playerName).get().sendMessage(builder.build());
 		}
 
 		player.sendMessage(Text.of(TextColors.GREEN, "Message sent"));

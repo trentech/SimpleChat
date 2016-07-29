@@ -2,6 +2,7 @@ package com.gmail.trentech.simplechat.commands;
 
 import java.util.Optional;
 
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -11,7 +12,6 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
-import com.gmail.trentech.simplechat.Main;
 import com.gmail.trentech.simplechat.data.Mute;
 import com.gmail.trentech.simplechat.utils.Help;
 
@@ -34,7 +34,7 @@ public class CMDMute implements CommandExecutor {
 
 		String playerName = args.<String> getOne("player").get();
 
-		Optional<Player> optionalPlayer = Main.getGame().getServer().getPlayer(playerName);
+		Optional<Player> optionalPlayer = Sponge.getServer().getPlayer(playerName);
 
 		if (!optionalPlayer.isPresent()) {
 			src.sendMessage(Text.of(TextColors.DARK_RED, playerName, " does not exist"));

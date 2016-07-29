@@ -6,10 +6,9 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.service.sql.SqlService;
-
-import com.gmail.trentech.simplechat.Main;
 
 public abstract class SQLUtils {
 
@@ -17,7 +16,7 @@ public abstract class SQLUtils {
 
 	protected static DataSource getDataSource() throws SQLException {
 		if (sql == null) {
-			sql = Main.getGame().getServiceManager().provide(SqlService.class).get();
+			sql = Sponge.getServiceManager().provide(SqlService.class).get();
 		}
 
 		return sql.getDataSource("jdbc:h2:./config/simplechat/chat");
