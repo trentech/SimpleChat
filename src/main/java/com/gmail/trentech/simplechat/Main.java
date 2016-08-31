@@ -1,10 +1,14 @@
 package com.gmail.trentech.simplechat;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
@@ -25,6 +29,7 @@ import com.gmail.trentech.simplechat.listeners.TagListener;
 import com.gmail.trentech.simplechat.utils.ConfigManager;
 import com.gmail.trentech.simplechat.utils.Resource;
 import com.gmail.trentech.simplechat.utils.SQLUtils;
+import com.google.inject.Inject;
 
 import me.flibio.updatifier.Updatifier;
 
@@ -32,18 +37,31 @@ import me.flibio.updatifier.Updatifier;
 @Plugin(id = Resource.ID, name = Resource.NAME, version = Resource.VERSION, description = Resource.DESCRIPTION, authors = Resource.AUTHOR, url = Resource.URL, dependencies = { @Dependency(id = "Updatifier", optional = true), @Dependency(id = "simpletags", version = "0.3.0", optional = true) })
 public class Main {
 
-	private static Logger log;
-	private static PluginContainer plugin;
+	@Inject @ConfigDir(sharedRoot = false)
+    private Path path;
 
+	@Inject 
+	private PluginContainer plugin;
+	
+	@Inject
+	private Logger log;
+
+	private static Main instance;
+	
 	@Listener
 	public void onPreInitializationEvent(GamePreInitializationEvent event) {
-		plugin = Sponge.getPluginManager().getPlugin(Resource.ID).get();
-		log = getPlugin().getLogger();
+		instance = this;
+		
+		try {			
+			Files.createDirectories(path);		
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Listener
 	public void onInitializationEvent(GameInitializationEvent event) {
-		new ConfigManager().init();
+		ConfigManager.init();
 
 		Sponge.getEventManager().registerListeners(this, new EventListener());
 
@@ -74,15 +92,23 @@ public class Main {
 		}
 	}
 
-	public static Logger getLog() {
+	public Logger getLog() {
 		return log;
 	}
 
-	public static PluginContainer getPlugin() {
+	public PluginContainer getPlugin() {
 		return plugin;
 	}
 
-	public static Text processText(String msg) {
+	public Path getPath() {
+		return path;
+	}
+
+	public static Main instance() {
+		return instance;
+	}
+	
+	public Text processText(String msg) {
 		Text message = Text.EMPTY;
 
 		while (msg.contains("&u")) {
@@ -98,7 +124,7 @@ public class Main {
 		return Text.of(message, TextSerializers.FORMATTING_CODE.deserialize(msg));
 	}
 
-	private static Text getLink(String link) {
+	private Text getLink(String link) {
 		Text.Builder builder = Text.builder();
 		String[] work = link.split(";");
 

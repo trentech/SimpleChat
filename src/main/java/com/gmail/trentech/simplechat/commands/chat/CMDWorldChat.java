@@ -24,34 +24,16 @@ public class CMDWorldChat implements CommandExecutor {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		if (args.hasAny("boolean")) {
-			src.sendMessage(Text.of(TextColors.YELLOW, "/chat worldchat <boolean>"));
-			return CommandResult.empty();
-		}
-		String bool = args.<String> getOne("boolean").get();
+		boolean bool = args.<Boolean> getOne("boolean").get();
 
-		ConfigManager configManager = new ConfigManager();
+		ConfigManager configManager = ConfigManager.get();
 		ConfigurationNode config = configManager.getConfig();
 
-		if (bool.equalsIgnoreCase("true")) {
-			config.getNode("options", "world_chat").setValue(true);
+		config.getNode("options", "world_chat").setValue(bool);
 
-			configManager.save();
+		configManager.save();
 
-			src.sendMessage(Text.of(TextColors.DARK_GREEN, "World specific chat enabled"));
-
-			return CommandResult.success();
-		} else if (bool.equalsIgnoreCase("false")) {
-			config.getNode("options", "world_chat").setValue(false);
-
-			configManager.save();
-
-			src.sendMessage(Text.of(TextColors.DARK_GREEN, "World specific chat disabled"));
-
-			return CommandResult.success();
-		}
-
-		src.sendMessage(Text.of(TextColors.DARK_RED, "true or false"));
+		src.sendMessage(Text.of(TextColors.DARK_GREEN, "World specific chat to to ", bool));
 
 		return CommandResult.empty();
 	}

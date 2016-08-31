@@ -49,19 +49,14 @@ public class CMDReply implements CommandExecutor {
 			recipient = Sponge.getServer().getConsole();
 		}
 
-		if (!args.hasAny("message")) {
-			src.sendMessage(Text.of(TextColors.YELLOW, "/reply <message>"));
-			return CommandResult.empty();
-		}
-
 		String messagePlain = args.<String> getOne("message").get();
 
-		Text message = Text.of(TextColors.GOLD, "[", src.getName(), "] --> [", recipient.getName(), "]", TextColors.WHITE, " ", Main.processText(messagePlain));
+		Text message = Text.of(TextColors.GOLD, "[", src.getName(), "] --> [", recipient.getName(), "]", TextColors.WHITE, " ", Main.instance().processText(messagePlain));
 
 		recipient.sendMessage(message);
 		src.sendMessage(message);
 
-		ConfigurationNode config = new ConfigManager().getConfig();
+		ConfigurationNode config = ConfigManager.get().getConfig();
 
 		if (config.getNode("options", "pm_snoop").getBoolean() && (!(recipient instanceof ConsoleSource || src instanceof ConsoleSource))) {
 			Sponge.getServer().getConsole().sendMessage(message);

@@ -1,7 +1,9 @@
 package com.gmail.trentech.simplechat.utils;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.gmail.trentech.simplechat.Main;
 
@@ -11,32 +13,59 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 
 public class ConfigManager {
 
-	private File file;
+	private Path path;
 	private CommentedConfigurationNode config;
 	private ConfigurationLoader<CommentedConfigurationNode> loader;
+	
+	private static ConcurrentHashMap<String, ConfigManager> configManagers = new ConcurrentHashMap<>();
 
-	public ConfigManager(String configName) {
-		String folder = "config" + File.separator + Resource.ID;
-		
-		if (!new File(folder).isDirectory()) {
-			new File(folder).mkdirs();
+	private ConfigManager(String configName) {
+		try {
+			path = Main.instance().getPath().resolve(configName + ".conf");
+			
+			if (!Files.exists(path)) {		
+				Files.createFile(path);
+				Main.instance().getLog().info("Creating new " + path.getFileName() + " file...");
+			}		
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		file = new File(folder + configName);
 
-		create();
 		load();
 	}
-
-	public ConfigManager() {
-		String folder = "config" + File.separator + Resource.ID;
+	
+	public static ConfigManager get(String configName) {
+		return configManagers.get(configName);
+	}
+	
+	public static ConfigManager get() {
+		return configManagers.get("config");
+	}
+	
+	public static ConfigManager init() {
+		return init("config");
+	}
+	
+	public static ConfigManager init(String configName) {
+		ConfigManager configManager = new ConfigManager(configName);
+		CommentedConfigurationNode config = configManager.getConfig();
 		
-		if (!new File(folder).isDirectory()) {
-			new File(folder).mkdirs();
+		if(configName.equalsIgnoreCase("config")) {
+			if (config.getNode("options", "pm_snoop").isVirtual()) {
+				config.getNode("options", "pm_snoop").setValue(false);
+			}
+			if (config.getNode("options", "world_chat").isVirtual()) {
+				config.getNode("options", "world_chat").setValue(false);
+			}
+			if (config.getNode("options", "ranged_chat", "enable").isVirtual()) {
+				config.getNode("options", "ranged_chat", "enable").setValue(false);
+				config.getNode("options", "ranged_chat", "range").setValue(32);
+			}
 		}
-		file = new File(folder, "config.conf");
-
-		create();
-		load();
+		
+		configManager.save();
+		
+		return configManager;
 	}
 
 	public ConfigurationLoader<CommentedConfigurationNode> getLoader() {
@@ -51,45 +80,17 @@ public class ConfigManager {
 		try {
 			loader.save(config);
 		} catch (IOException e) {
-			Main.getLog().error("Failed to save config");
+			Main.instance().getLog().error("Failed to save config");
 			e.printStackTrace();
 		}
 	}
 
-	public void init() {
-		if (file.getName().equalsIgnoreCase("config.conf")) {
-			if (config.getNode("options", "pm_snoop").isVirtual()) {
-				config.getNode("options", "pm_snoop").setValue(false);
-			}
-			if (config.getNode("options", "world_chat").isVirtual()) {
-				config.getNode("options", "world_chat").setValue(false);
-			}
-			if (config.getNode("options", "ranged_chat", "enable").isVirtual()) {
-				config.getNode("options", "ranged_chat", "enable").setValue(false);
-				config.getNode("options", "ranged_chat", "range").setValue(32);
-			}
-		}
-		save();
-	}
-
-	private void create() {
-		if (!file.exists()) {
-			try {
-				Main.getLog().info("Creating new " + file.getName() + " file...");
-				file.createNewFile();
-			} catch (IOException e) {
-				Main.getLog().error("Failed to create new config file");
-				e.printStackTrace();
-			}
-		}
-	}
-
 	private void load() {
-		loader = HoconConfigurationLoader.builder().setFile(file).build();
+		loader = HoconConfigurationLoader.builder().setPath(path).build();
 		try {
 			config = loader.load();
 		} catch (IOException e) {
-			Main.getLog().error("Failed to load config");
+			Main.instance().getLog().error("Failed to load config");
 			e.printStackTrace();
 		}
 	}

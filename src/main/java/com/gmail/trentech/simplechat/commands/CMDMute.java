@@ -1,8 +1,5 @@
 package com.gmail.trentech.simplechat.commands;
 
-import java.util.Optional;
-
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -32,15 +29,7 @@ public class CMDMute implements CommandExecutor {
 		}
 		Player player = (Player) src;
 
-		String playerName = args.<String> getOne("player").get();
-
-		Optional<Player> optionalPlayer = Sponge.getServer().getPlayer(playerName);
-
-		if (!optionalPlayer.isPresent()) {
-			src.sendMessage(Text.of(TextColors.DARK_RED, playerName, " does not exist"));
-			return CommandResult.empty();
-		}
-		Player target = optionalPlayer.get();
+		Player target = args.<Player> getOne("player").get();
 
 		if (target.hasPermission("simplechat.unmute")) {
 			src.sendMessage(Text.of(TextColors.DARK_RED, "You cannot mute this player"));
@@ -51,10 +40,10 @@ public class CMDMute implements CommandExecutor {
 
 		if (mute.getPlayers().contains(target.getUniqueId().toString())) {
 			mute.removePlayer(target);
-			player.sendMessage(Text.of(TextColors.DARK_GREEN, playerName, " can now speak"));
+			player.sendMessage(Text.of(TextColors.DARK_GREEN, target.getName(), " can now speak"));
 		} else {
 			mute.addPlayer(target);
-			player.sendMessage(Text.of(TextColors.DARK_GREEN, playerName, " has been muted"));
+			player.sendMessage(Text.of(TextColors.DARK_GREEN, target.getName(), " has been muted"));
 		}
 
 		return CommandResult.success();

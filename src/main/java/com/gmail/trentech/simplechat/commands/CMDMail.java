@@ -13,9 +13,8 @@ import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.service.pagination.PaginationList;
-import org.spongepowered.api.service.pagination.PaginationService;
-import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.Text.Builder;
 import org.spongepowered.api.text.action.TextActions;
@@ -41,8 +40,8 @@ public class CMDMail implements CommandExecutor {
 		}
 		Player player = (Player) src;
 
-		if (!args.hasAny("player")) {
-			PaginationList.Builder pageBuilder = Sponge.getServiceManager().provide(PaginationService.class).get().builder();
+		if (!args.hasAny("user")) {
+			PaginationList.Builder pageBuilder = PaginationList.builder();
 
 			pageBuilder.title(Text.builder().color(TextColors.DARK_GREEN).append(Text.of(TextColors.GREEN, "Mail")).build());
 
@@ -77,30 +76,22 @@ public class CMDMail implements CommandExecutor {
 
 			return CommandResult.success();
 		}
-		String playerName = args.<String> getOne("player").get();
+		User user = args.<User> getOne("user").get();
 
-		if (!args.hasAny("message")) {
-			src.sendMessage(Text.of(TextColors.YELLOW, "/mail <player> <message>"));
-			return CommandResult.empty();
-		}
 		String msg = args.<String> getOne("message").get();
 
-		UserStorageService userStorage = Sponge.getServiceManager().provide(UserStorageService.class).get();
-
-		if (!userStorage.get(playerName).isPresent()) {
-			player.sendMessage(Text.of(TextColors.DARK_RED, playerName, " does not exist."));
-			return CommandResult.empty();
-		}
-		String playerUuid = userStorage.get(playerName).get().getUniqueId().toString();
+		String playerUuid = user.getUniqueId().toString();
 
 		new Message(playerUuid, player.getName(), msg);
 
-		if (Sponge.getServer().getPlayer(playerName).isPresent()) {
+		Optional<Player> optionalPlayer = Sponge.getServer().getPlayer(playerUuid);
+		
+		if (optionalPlayer.isPresent()) {
 			Builder builder = Text.builder().color(TextColors.GREEN).append(Text.of("You have unread messages! /mail"));
 			builder.onClick(TextActions.runCommand("/mail"));
 			builder.onHover(TextActions.showText(Text.of("Click to open mailbox")));
 
-			Sponge.getServer().getPlayer(playerName).get().sendMessage(builder.build());
+			optionalPlayer.get().sendMessage(builder.build());
 		}
 
 		player.sendMessage(Text.of(TextColors.GREEN, "Message sent"));

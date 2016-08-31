@@ -100,7 +100,7 @@ public class EventListener {
 			}
 		}
 
-		ConfigurationNode config = new ConfigManager().getConfig();
+		ConfigurationNode config = ConfigManager.get().getConfig();
 
 		if (config.getNode("options", "world_chat").getBoolean()) {
 			for (MessageReceiver src : Lists.newArrayList(messageChannel.getMembers())) {
@@ -144,7 +144,7 @@ public class EventListener {
 
 		String messageOrig = TextSerializers.FORMATTING_CODE.serialize(event.getFormatter().getBody().toText());
 
-		Text message = Main.processText(messageOrig);
+		Text message = Main.instance().processText(messageOrig);
 
 		formatter.setBody(TextTemplate.of(message));
 	}

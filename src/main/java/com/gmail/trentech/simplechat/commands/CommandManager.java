@@ -14,31 +14,31 @@ public class CommandManager {
 
 	public CommandSpec cmdMessage = CommandSpec.builder()
 		    .permission("simplechat.cmd.message")	    
-		    .arguments(GenericArguments.optional(GenericArguments.string(Text.of("playerName"))), GenericArguments.optional(GenericArguments.remainingJoinedStrings(Text.of("message"))))
+		    .arguments(GenericArguments.player(Text.of("player")), GenericArguments.remainingJoinedStrings(Text.of("message")))
 		    .executor(new CMDMessage())
 		    .build();
 
 	public CommandSpec cmdReply = CommandSpec.builder()
 		    .permission("simplechat.cmd.message")	    
-		    .arguments(GenericArguments.optional(GenericArguments.remainingJoinedStrings(Text.of("message"))))
+		    .arguments(GenericArguments.remainingJoinedStrings(Text.of("message")))
 		    .executor(new CMDReply())
 		    .build();
 
 	public CommandSpec cmdSay = CommandSpec.builder()
 		    .permission("simplechat.cmd.say")
-		    .arguments(GenericArguments.optional(GenericArguments.remainingJoinedStrings(Text.of("message"))))
+		    .arguments(GenericArguments.remainingJoinedStrings(Text.of("message")))
 		    .executor(new CMDSay())
 		    .build();
 	
 	public CommandSpec cmdMute = CommandSpec.builder()
 		    .permission("simplechat.cmd.mute")	    
-		    .arguments(GenericArguments.optional(GenericArguments.string(Text.of("player"))))
+		    .arguments(GenericArguments.player(Text.of("player")))
 		    .executor(new CMDMute())
 		    .build();
 	
 	public CommandSpec cmdMail = CommandSpec.builder()
 		    .permission("simplechat.cmd.mail")
-		    .arguments(GenericArguments.optional(GenericArguments.string(Text.of("player"))), GenericArguments.optional(GenericArguments.remainingJoinedStrings(Text.of("message"))))
+		    .arguments(GenericArguments.optional(GenericArguments.user(Text.of("user"))), GenericArguments.remainingJoinedStrings(Text.of("message")))
 		    .executor(new CMDMail())
 		    .build();
 
@@ -50,19 +50,19 @@ public class CommandManager {
 
 	private CommandSpec cmdRange = CommandSpec.builder()
 		    .permission("simplechat.cmd.chat.range")
-		    .arguments(GenericArguments.optional(GenericArguments.string(Text.of("boolean"))), GenericArguments.optional(GenericArguments.string(Text.of("value"))))
+		    .arguments(GenericArguments.bool(Text.of("boolean")), GenericArguments.optional(GenericArguments.integer(Text.of("value"))))
 		    .executor(new CMDRange())
 		    .build();
 	
 	private CommandSpec cmdSnoop = CommandSpec.builder()
 		    .permission("simplechat.cmd.chat.snoop")
-		    .arguments(GenericArguments.optional(GenericArguments.string(Text.of("boolean"))), GenericArguments.optional(GenericArguments.string(Text.of("value"))))
+		    .arguments(GenericArguments.bool(Text.of("boolean")))
 		    .executor(new CMDSnoop())
 		    .build();
 	
 	private CommandSpec cmdWorldChat = CommandSpec.builder()
 		    .permission("simplechat.cmd.chat.worldchat")
-		    .arguments(GenericArguments.optional(GenericArguments.string(Text.of("boolean"))))
+		    .arguments(GenericArguments.bool(Text.of("boolean")))
 		    .executor(new CMDWorldChat())
 		    .build();
 

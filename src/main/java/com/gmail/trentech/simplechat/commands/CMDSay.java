@@ -23,15 +23,11 @@ public class CMDSay implements CommandExecutor {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		if (!args.hasAny("message")) {
-			src.sendMessage(Text.of(TextColors.YELLOW, "/say <message>"));
-			return CommandResult.empty();
-		}
 		String message = args.<String> getOne("message").get();
 
 		MessageChannel channel = MessageChannel.TO_ALL;
 
-		channel.send(Text.of(TextColors.GOLD, "[", src.getName(), "]", TextColors.WHITE, " ", Main.processText(message)));
+		channel.send(Text.of(TextColors.GOLD, "[", src.getName(), "]", TextColors.WHITE, " ", Main.instance().processText(message)));
 
 		return CommandResult.success();
 	}

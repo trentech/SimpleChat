@@ -1,7 +1,5 @@
 package com.gmail.trentech.simplechat.commands;
 
-import java.util.Optional;
-
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -35,40 +33,21 @@ public class CMDMessage implements CommandExecutor {
 			src.sendMessage(Text.of(TextColors.YELLOW, "/message <player> <message>"));
 			return CommandResult.empty();
 		}
-		String playerName = args.<String> getOne("playerName").get();
-
-		Optional<Player> optionalPlayer = Sponge.getServer().getPlayer(playerName);
-
-		if (!optionalPlayer.isPresent()) {
-			CMDReply.getReply().remove(src.getName());
-
-			if (!playerName.equalsIgnoreCase("Server")) {
-				src.sendMessage(Text.of(TextColors.DARK_RED, playerName, " is offline."));
-				return CommandResult.empty();
-			}
-
-			src.sendMessage(Text.of(TextColors.DARK_RED, "You cannot message the console directly, but can reply to message from."));
-			return CommandResult.empty();
-		}
-		Player player = optionalPlayer.get();
+		Player player = args.<Player> getOne("player").get();
 
 		if ((src instanceof Player) && Mute.get(player).get().getPlayers().contains(((Player) src).getUniqueId().toString())) {
-			src.sendMessage(Text.of(TextColors.DARK_RED, playerName, " has muted you. You can only reply to a message from this player"));
+			src.sendMessage(Text.of(TextColors.DARK_RED, player.getName(), " has muted you. You can only reply to a message from this player"));
 			return CommandResult.empty();
 		}
 
-		if (!args.hasAny("message")) {
-			src.sendMessage(Text.of(TextColors.YELLOW, "/msg <player> <message>"));
-			return CommandResult.empty();
-		}
 		String messagePlain = args.<String> getOne("message").get();
 
-		Text message = Text.of(TextColors.GOLD, "[", src.getName(), "] --> [", player.getName(), "]", TextColors.WHITE, " ", Main.processText(messagePlain));
+		Text message = Text.of(TextColors.GOLD, "[", src.getName(), "] --> [", player.getName(), "]", TextColors.WHITE, " ", Main.instance().processText(messagePlain));
 
 		player.sendMessage(message);
 		src.sendMessage(message);
 
-		ConfigurationNode config = new ConfigManager().getConfig();
+		ConfigurationNode config = ConfigManager.get().getConfig();
 
 		if (config.getNode("options", "pm_snoop").getBoolean() && (!(src instanceof ConsoleSource))) {
 			Sponge.getServer().getConsole().sendMessage(message);

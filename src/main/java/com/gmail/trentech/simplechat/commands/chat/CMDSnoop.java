@@ -24,34 +24,16 @@ public class CMDSnoop implements CommandExecutor {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		if (!args.hasAny("boolean")) {
-			src.sendMessage(Text.of(TextColors.YELLOW, "/chat snoop <boolean>"));
-			return CommandResult.empty();
-		}
-		String bool = args.<String> getOne("boolean").get();
+		boolean bool = args.<Boolean> getOne("boolean").get();
 
-		ConfigManager configManager = new ConfigManager();
+		ConfigManager configManager = ConfigManager.get();
 		ConfigurationNode config = configManager.getConfig();
 
-		if (bool.equalsIgnoreCase("true")) {
-			config.getNode("options", "pm_snoop").setValue(true);
+		config.getNode("options", "pm_snoop").setValue(bool);
 
-			configManager.save();
+		configManager.save();
 
-			src.sendMessage(Text.of(TextColors.DARK_GREEN, "Private snooping enabled"));
-
-			return CommandResult.success();
-		} else if (bool.equalsIgnoreCase("false")) {
-			config.getNode("options", "pm_snoop").setValue(false);
-
-			configManager.save();
-
-			src.sendMessage(Text.of(TextColors.DARK_GREEN, "Private snooping disabled"));
-
-			return CommandResult.success();
-		}
-
-		src.sendMessage(Text.of(TextColors.DARK_RED, "true or false"));
+		src.sendMessage(Text.of(TextColors.DARK_GREEN, "Private snooping set to ", bool));
 
 		return CommandResult.empty();
 	}

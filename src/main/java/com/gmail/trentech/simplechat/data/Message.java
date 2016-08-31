@@ -48,7 +48,7 @@ public class Message extends SQLUtils {
 	}
 
 	public Text getMessage() {
-		return Main.processText(message);
+		return Main.instance().processText(message);
 	}
 
 	public boolean isRead() {

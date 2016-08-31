@@ -24,31 +24,16 @@ public class CMDRange implements CommandExecutor {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		if (!args.hasAny("boolean")) {
-			src.sendMessage(Text.of(TextColors.YELLOW, "/chat range <boolean> [value]"));
-			return CommandResult.empty();
-		}
-		String bool = args.<String> getOne("boolean").get();
+		boolean bool = args.<Boolean> getOne("boolean").get();
 
-		if (!bool.equalsIgnoreCase("true") || !bool.equalsIgnoreCase("false")) {
-			src.sendMessage(Text.of(TextColors.DARK_RED, "Boolean must be true or false"));
-			return CommandResult.empty();
-		}
-
-		ConfigManager configManager = new ConfigManager();
+		ConfigManager configManager = ConfigManager.get();
 		ConfigurationNode config = configManager.getConfig();
 
 		if (args.hasAny("value")) {
-			String value = args.<String> getOne("value").get();
-			try {
-				config.getNode("options", "ranged_chat", "range").setValue(Integer.parseInt(value));
-			} catch (Exception e) {
-				src.sendMessage(Text.of(TextColors.DARK_RED, value, " is not a valid value"));
-				return CommandResult.empty();
-			}
+			config.getNode("options", "ranged_chat", "range").setValue(args.<Integer> getOne("value").get());
 		}
 
-		config.getNode("options", "ranged_chat", "enable").setValue(Boolean.parseBoolean(bool));
+		config.getNode("options", "ranged_chat", "enable").setValue(bool);
 
 		configManager.save();
 

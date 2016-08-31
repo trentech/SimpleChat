@@ -21,7 +21,7 @@ public class CMDChannel implements CommandExecutor {
 
 	public CMDChannel() {
 		Help help = new Help("channel", "channel", " Set channel player will send and receives chat messages from. Set to global to reset");
-		help.setSyntax(" /channel <player>\n /m <player>");
+		help.setSyntax(" /channel [channel]\n /m [channel]");
 		help.setExample(" /channel whatever\n /channel global");
 		help.save();
 	}
@@ -36,7 +36,7 @@ public class CMDChannel implements CommandExecutor {
 
 		if (!args.hasAny("channel")) {
 			src.sendMessage(Text.of(TextColors.GREEN, "Current Channel: ", TextColors.WHITE, hash.get(player.getUniqueId())));
-			src.sendMessage(Text.of(TextColors.YELLOW, "/channel <channel>"));
+
 			return CommandResult.empty();
 		}
 
