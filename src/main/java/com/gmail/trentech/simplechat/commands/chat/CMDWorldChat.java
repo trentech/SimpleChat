@@ -35,7 +35,7 @@ public class CMDWorldChat implements CommandExecutor {
 
 		src.sendMessage(Text.of(TextColors.DARK_GREEN, "World specific chat to to ", bool));
 
-		return CommandResult.empty();
+		return CommandResult.success();
 	}
 
 }

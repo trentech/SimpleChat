@@ -30,14 +30,12 @@ public class CMDMessage implements CommandExecutor {
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if (!args.hasAny("playerName")) {
-			src.sendMessage(Text.of(TextColors.YELLOW, "/message <player> <message>"));
-			return CommandResult.empty();
+			throw new CommandException(Text.of(TextColors.YELLOW, "/message <player> <message>"));
 		}
 		Player player = args.<Player> getOne("player").get();
 
 		if ((src instanceof Player) && Mute.get(player).get().getPlayers().contains(((Player) src).getUniqueId().toString())) {
-			src.sendMessage(Text.of(TextColors.DARK_RED, player.getName(), " has muted you. You can only reply to a message from this player"));
-			return CommandResult.empty();
+			throw new CommandException(Text.of(TextColors.RED, player.getName(), " has muted you. You can only reply to a message from this player"));
 		}
 
 		String messagePlain = args.<String> getOne("message").get();

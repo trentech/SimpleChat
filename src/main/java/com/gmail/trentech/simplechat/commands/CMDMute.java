@@ -24,16 +24,14 @@ public class CMDMute implements CommandExecutor {
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if (!args.hasAny("player")) {
-			src.sendMessage(Text.of(TextColors.YELLOW, "/mute <player>"));
-			return CommandResult.empty();
+			throw new CommandException(Text.of(TextColors.YELLOW, "/mute <player>"));
 		}
 		Player player = (Player) src;
 
 		Player target = args.<Player> getOne("player").get();
 
 		if (target.hasPermission("simplechat.unmute")) {
-			src.sendMessage(Text.of(TextColors.DARK_RED, "You cannot mute this player"));
-			return CommandResult.empty();
+			throw new CommandException(Text.of(TextColors.RED, "You cannot mute this player"));
 		}
 
 		Mute mute = Mute.get(player).get();

@@ -35,8 +35,7 @@ public class CMDMail implements CommandExecutor {
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if (!(src instanceof Player)) {
-			src.sendMessage(Text.of(TextColors.DARK_RED, "Players only..for now!"));
-			return CommandResult.empty();
+			throw new CommandException(Text.of(TextColors.RED, "Players only..for now!"));
 		}
 		Player player = (Player) src;
 

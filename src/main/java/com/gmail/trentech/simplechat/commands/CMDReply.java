@@ -32,17 +32,15 @@ public class CMDReply implements CommandExecutor {
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if (!getReply().containsKey(src.getName())) {
-			src.sendMessage(Text.of(TextColors.DARK_RED, "No message to reply to."));
-			return CommandResult.empty();
+			throw new CommandException(Text.of(TextColors.RED, "No message to reply to."));
 		}
 		String playerName = getReply().get(src.getName());
 
 		CommandSource recipient;
 		if (!playerName.equalsIgnoreCase("Server")) {
 			if (!(Sponge.getServer().getPlayer(playerName).isPresent())) {
-				src.sendMessage(Text.of(TextColors.DARK_RED, playerName, " is offline."));
 				getReply().remove(src.getName());
-				return CommandResult.empty();
+				throw new CommandException(Text.of(TextColors.RED, playerName, " is offline."));
 			}
 			recipient = Sponge.getServer().getPlayer(playerName).get();
 		} else {

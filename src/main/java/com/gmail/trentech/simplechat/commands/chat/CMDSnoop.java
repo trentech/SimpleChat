@@ -35,7 +35,7 @@ public class CMDSnoop implements CommandExecutor {
 
 		src.sendMessage(Text.of(TextColors.DARK_GREEN, "Private snooping set to ", bool));
 
-		return CommandResult.empty();
+		return CommandResult.success();
 	}
 
 }
