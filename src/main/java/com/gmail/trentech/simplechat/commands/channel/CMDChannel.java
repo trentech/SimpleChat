@@ -29,22 +29,18 @@ public class CMDChannel implements CommandExecutor {
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if (src instanceof ConsoleSource) {
-			src.sendMessage(Text.of(TextColors.DARK_RED, "Must be a player"));
-			return CommandResult.empty();
+			throw new CommandException(Text.of(TextColors.RED, "Must be a player"));
 		}
 		Player player = (Player) src;
 
 		if (!args.hasAny("channel")) {
-			src.sendMessage(Text.of(TextColors.GREEN, "Current Channel: ", TextColors.WHITE, hash.get(player.getUniqueId())));
-
-			return CommandResult.empty();
+			throw new CommandException(Text.of(TextColors.GREEN, "Current Channel: ", TextColors.WHITE, hash.get(player.getUniqueId())));
 		}
 
 		String channel = args.<String> getOne("channel").get();
 
 		if (!src.hasPermission("simplechat.channel." + channel) && !channel.equalsIgnoreCase("global")) {
-			src.sendMessage(Text.of(TextColors.DARK_RED, "You do not have permission to use this channel"));
-			return CommandResult.empty();
+			throw new CommandException(Text.of(TextColors.RED, "You do not have permission to use this channel"));
 		}
 
 		hash.put(player.getUniqueId(), channel);
