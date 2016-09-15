@@ -23,6 +23,8 @@ public class CMDChat implements CommandExecutor {
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		List<Text> list = new ArrayList<>();
 
+		list.add(Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("Click command to execute "))).onClick(TextActions.runCommand("/simplechat:chat help")).append(Text.of(" /chat help")).build());
+		
 		if (src.hasPermission("simplechat.cmd.chat.range")) {
 			list.add(Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("Click command for more information "))).onClick(TextActions.executeCallback(Help.getHelp("range"))).append(Text.of(" /chat range")).build());
 		}
