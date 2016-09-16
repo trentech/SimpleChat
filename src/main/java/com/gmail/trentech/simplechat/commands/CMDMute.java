@@ -16,6 +16,7 @@ public class CMDMute implements CommandExecutor {
 
 	public CMDMute() {
 		Help help = new Help("mute", "mute", " Mutes player from sending you any kind of message, public or private");
+		help.setPermission("simplechat.cmd.mute");
 		help.setSyntax(" /mute <player>\n /m <player>");
 		help.setExample(" /mute Notch");
 		help.save();
@@ -23,15 +24,15 @@ public class CMDMute implements CommandExecutor {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		if (!args.hasAny("player")) {
-			throw new CommandException(Text.of(TextColors.YELLOW, "/mute <player>"));
+		if (!(src instanceof Player)) {
+			throw new CommandException(Text.of(TextColors.RED, "Must be a player"), false);
 		}
 		Player player = (Player) src;
 
 		Player target = args.<Player> getOne("player").get();
 
 		if (target.hasPermission("simplechat.unmute")) {
-			throw new CommandException(Text.of(TextColors.RED, "You cannot mute this player"));
+			throw new CommandException(Text.of(TextColors.RED, "You cannot mute this player"), false);
 		}
 
 		Mute mute = Mute.get(player).get();

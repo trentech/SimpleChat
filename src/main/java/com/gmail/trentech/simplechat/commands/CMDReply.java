@@ -24,6 +24,7 @@ public class CMDReply implements CommandExecutor {
 
 	public CMDReply() {
 		Help help = new Help("reply", "reply", " Reply to a player that sent you a private message");
+		help.setPermission("simplechat.cmd.reply");
 		help.setSyntax(" /reply <message>\n /r <message>");
 		help.setExample(" /reply I don't need diamond");
 		help.save();
@@ -32,7 +33,7 @@ public class CMDReply implements CommandExecutor {
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if (!getReply().containsKey(src.getName())) {
-			throw new CommandException(Text.of(TextColors.RED, "No message to reply to."));
+			throw new CommandException(Text.of(TextColors.RED, "No message to reply to."), false);
 		}
 		String playerName = getReply().get(src.getName());
 
@@ -40,7 +41,7 @@ public class CMDReply implements CommandExecutor {
 		if (!playerName.equalsIgnoreCase("Server")) {
 			if (!(Sponge.getServer().getPlayer(playerName).isPresent())) {
 				getReply().remove(src.getName());
-				throw new CommandException(Text.of(TextColors.RED, playerName, " is offline."));
+				throw new CommandException(Text.of(TextColors.RED, playerName, " is offline."), false);
 			}
 			recipient = Sponge.getServer().getPlayer(playerName).get();
 		} else {

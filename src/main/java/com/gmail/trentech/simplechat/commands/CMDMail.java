@@ -27,6 +27,7 @@ public class CMDMail implements CommandExecutor {
 
 	public CMDMail() {
 		Help help = new Help("mail", "mail", " Sender messages to offline players");
+		help.setPermission("simplechat.cmd.mail");
 		help.setSyntax(" /mail <player> <message>\n /ml <player> <message>");
 		help.setExample(" /mail\n /mail Notch I destroyed your house...sorry");
 		help.save();
@@ -35,7 +36,7 @@ public class CMDMail implements CommandExecutor {
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if (!(src instanceof Player)) {
-			throw new CommandException(Text.of(TextColors.RED, "Players only..for now!"));
+			throw new CommandException(Text.of(TextColors.RED, "Players only..for now!"), false);
 		}
 		Player player = (Player) src;
 
