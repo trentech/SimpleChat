@@ -16,6 +16,7 @@ public class CMDSay implements CommandExecutor {
 
 	public CMDSay() {
 		Help help = new Help("say", "say", " Send a message to the server from the console");
+		help.setPermission("simplechat.cmd.say");
 		help.setSyntax(" /say <message>\n /s <message>");
 		help.setExample(" /say Drop party coming soon");
 		help.save();

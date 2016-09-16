@@ -17,6 +17,7 @@ public class CMDSnoop implements CommandExecutor {
 
 	public CMDSnoop() {
 		Help help = new Help("snoop", "snoop", " Toggle on and off private message snooping");
+		help.setPermission("simplechat.cmd.chat.snoop");
 		help.setSyntax(" /chat snoop <boolean>\n /c s <boolean>");
 		help.setExample(" /chat snoop true");
 		help.save();

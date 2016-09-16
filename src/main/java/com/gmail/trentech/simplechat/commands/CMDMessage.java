@@ -22,6 +22,7 @@ public class CMDMessage implements CommandExecutor {
 
 	public CMDMessage() {
 		Help help = new Help("message", "message", " Send a private message to a player");
+		help.setPermission("simplechat.cmd.message");
 		help.setSyntax(" /message <player> <message>\n /msg <player> <message>");
 		help.setExample(" /message Notch I found diamond");
 		help.save();
@@ -29,13 +30,10 @@ public class CMDMessage implements CommandExecutor {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		if (!args.hasAny("playerName")) {
-			throw new CommandException(Text.of(TextColors.YELLOW, "/message <player> <message>"));
-		}
 		Player player = args.<Player> getOne("player").get();
 
 		if ((src instanceof Player) && Mute.get(player).get().getPlayers().contains(((Player) src).getUniqueId().toString())) {
-			throw new CommandException(Text.of(TextColors.RED, player.getName(), " has muted you. You can only reply to a message from this player"));
+			throw new CommandException(Text.of(TextColors.RED, player.getName(), " has muted you. You can only reply to a message from this player"), false);
 		}
 
 		String messagePlain = args.<String> getOne("message").get();

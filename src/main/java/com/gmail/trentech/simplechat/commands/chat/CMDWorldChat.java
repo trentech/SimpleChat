@@ -17,6 +17,7 @@ public class CMDWorldChat implements CommandExecutor {
 
 	public CMDWorldChat() {
 		Help help = new Help("worldchat", "worldchat", " Toggle on and off world specific chat");
+		help.setPermission("simplechat.cmd.chat.worldchat");
 		help.setSyntax(" /chat worldchat <boolean>\n /c w <boolean>");
 		help.setExample(" /chat worldchat true");
 		help.save();

@@ -21,6 +21,7 @@ public class CMDChannel implements CommandExecutor {
 
 	public CMDChannel() {
 		Help help = new Help("channel", "channel", " Set channel player will send and receives chat messages from. Set to global to reset");
+		help.setPermission("simplechat.cmd.channel");
 		help.setSyntax(" /channel [channel]\n /m [channel]");
 		help.setExample(" /channel whatever\n /channel global");
 		help.save();
@@ -29,18 +30,18 @@ public class CMDChannel implements CommandExecutor {
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if (src instanceof ConsoleSource) {
-			throw new CommandException(Text.of(TextColors.RED, "Must be a player"));
+			throw new CommandException(Text.of(TextColors.RED, "Must be a player"), false);
 		}
 		Player player = (Player) src;
 
 		if (!args.hasAny("channel")) {
-			throw new CommandException(Text.of(TextColors.GREEN, "Current Channel: ", TextColors.WHITE, hash.get(player.getUniqueId())));
+			throw new CommandException(Text.of(TextColors.GREEN, "Current Channel: ", TextColors.WHITE, hash.get(player.getUniqueId())), false);
 		}
 
 		String channel = args.<String> getOne("channel").get();
 
 		if (!src.hasPermission("simplechat.channel." + channel) && !channel.equalsIgnoreCase("global")) {
-			throw new CommandException(Text.of(TextColors.RED, "You do not have permission to use this channel"));
+			throw new CommandException(Text.of(TextColors.RED, "You do not have permission to use this channel"), false);
 		}
 
 		hash.put(player.getUniqueId(), channel);
