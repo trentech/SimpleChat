@@ -20,6 +20,7 @@ public class Help {
 	private final String id;
 	private final String command;
 	private final String description;
+	private Optional<String> permission = Optional.empty();
 	private Optional<String> syntax = Optional.empty();
 	private Optional<String> example = Optional.empty();
 
@@ -39,6 +40,14 @@ public class Help {
 		return description;
 	}
 
+	public Optional<String> getPermission() {
+		return permission;
+	}
+	
+	public void setPermission(String permission) {
+		this.permission = Optional.of(permission);
+	}
+	
 	public Optional<String> getSyntax() {
 		return syntax;
 	}
@@ -60,7 +69,7 @@ public class Help {
 	}
 
 	public void save() {
-		list.put(getCommand(), this);
+		list.put(getId(), this);
 	}
 
 	public void execute(CommandSource src) {
@@ -69,6 +78,10 @@ public class Help {
 		list.add(Text.of(TextColors.GREEN, "Description:"));
 		list.add(Text.of(TextColors.WHITE, getDescription()));
 
+		if (getPermission().isPresent()) {
+			list.add(Text.of(TextColors.GREEN, "Permission:"));
+			list.add(Text.of(TextColors.WHITE, " ", getPermission().get()));
+		}
 		if (getSyntax().isPresent()) {
 			list.add(Text.of(TextColors.GREEN, "Syntax:"));
 			list.add(Text.of(TextColors.WHITE, getSyntax().get()));
@@ -93,18 +106,18 @@ public class Help {
 		}
 	}
 	
-	public static Optional<Help> get(String command) {
-		if(list.containsKey(command)) {
-			return Optional.of(list.get(command));
+	public static Optional<Help> get(String id) {
+		if(list.containsKey(id)) {
+			return Optional.of(list.get(id));
 		}
 		
 		return Optional.empty();
 	}
 	
-	public static Consumer<CommandSource> getHelp(String command) {
+	public static Consumer<CommandSource> getHelp(String id) {
 		return (CommandSource src) -> {
-			if(list.containsKey(command)) {
-				Help help = list.get(command);
+			if(list.containsKey(id)) {
+				Help help = list.get(id);
 				help.execute(src);
 			}
 		};
