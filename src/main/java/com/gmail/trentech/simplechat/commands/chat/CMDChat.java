@@ -3,6 +3,7 @@ package com.gmail.trentech.simplechat.commands.chat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -15,42 +16,28 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
-import com.gmail.trentech.simplechat.utils.Help;
+import com.gmail.trentech.helpme.Help;
 
 public class CMDChat implements CommandExecutor {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
+		if (Sponge.getPluginManager().isLoaded("helpme")) {
+			Help.executeList(src, Help.get("chat").get().getChildren());
+			
+			return CommandResult.success();
+		}
+		
 		List<Text> list = new ArrayList<>();
 
-		list.add(Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("Click command to execute "))).onClick(TextActions.runCommand("/simplechat:chat help")).append(Text.of(" /chat help")).build());
-		
 		if (src.hasPermission("simplechat.cmd.chat.range")) {
-			list.add(Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("Click command for more information "))).onClick(TextActions.executeCallback(Help.getHelp("range"))).append(Text.of(" /chat range")).build());
+			list.add(Text.builder().color(TextColors.GREEN).onClick(TextActions.runCommand("/simplechat:chat range")).append(Text.of(" /chat range")).build());
 		}
 		if (src.hasPermission("simplechat.cmd.chat.snoop")) {
-			list.add(Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("Click command for more information "))).onClick(TextActions.executeCallback(Help.getHelp("snoop"))).append(Text.of(" /chat snoop")).build());
+			list.add(Text.builder().color(TextColors.GREEN).onClick(TextActions.runCommand("/simplechat:chat snoop")).append(Text.of(" /chat snoop")).build());
 		}
 		if (src.hasPermission("simplechat.cmd.chat.worldchat")) {
-			list.add(Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("Click command for more information "))).onClick(TextActions.executeCallback(Help.getHelp("worldchat"))).append(Text.of(" /chat worldchat")).build());
-		}
-		if (src.hasPermission("simplechat.cmd.channel")) {
-			list.add(Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("Click command for more information "))).onClick(TextActions.runCommand("/channel")).append(Text.of(" /channel")).build());
-		}
-		if (src.hasPermission("simplechat.cmd.mail")) {
-			list.add(Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("Click command for more information "))).onClick(TextActions.executeCallback(Help.getHelp("mail"))).append(Text.of(" /mail")).build());
-		}
-		if (src.hasPermission("simplechat.cmd.message")) {
-			list.add(Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("Click command for more information "))).onClick(TextActions.executeCallback(Help.getHelp("message"))).append(Text.of(" /message")).build());
-		}
-		if (src.hasPermission("simplechat.cmd.mute")) {
-			list.add(Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("Click command for more information "))).onClick(TextActions.executeCallback(Help.getHelp("mute"))).append(Text.of(" /mute")).build());
-		}
-		if (src.hasPermission("simplechat.cmd.reply")) {
-			list.add(Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("Click command for more information "))).onClick(TextActions.executeCallback(Help.getHelp("reply"))).append(Text.of(" /reply")).build());
-		}
-		if (src.hasPermission("simplechat.cmd.say")) {
-			list.add(Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("Click command for more information "))).onClick(TextActions.executeCallback(Help.getHelp("say"))).append(Text.of(" /say")).build());
+			list.add(Text.builder().color(TextColors.GREEN).onClick(TextActions.runCommand("/simplechat:chat worldchat")).append(Text.of(" /chat worldchat")).build());
 		}
 
 		if (src instanceof Player) {

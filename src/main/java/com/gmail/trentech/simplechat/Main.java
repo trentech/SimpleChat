@@ -21,6 +21,7 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
+import com.gmail.trentech.helpme.Help;
 import com.gmail.trentech.simplechat.commands.CommandManager;
 import com.gmail.trentech.simplechat.commands.channel.CMDTagChannel;
 import com.gmail.trentech.simplechat.data.ChannelTag;
@@ -34,7 +35,7 @@ import com.google.inject.Inject;
 import me.flibio.updatifier.Updatifier;
 
 @Updatifier(repoName = Resource.NAME, repoOwner = Resource.AUTHOR, version = Resource.VERSION)
-@Plugin(id = Resource.ID, name = Resource.NAME, version = Resource.VERSION, description = Resource.DESCRIPTION, authors = Resource.AUTHOR, url = Resource.URL, dependencies = { @Dependency(id = "Updatifier", optional = true), @Dependency(id = "simpletags", version = "0.3.0", optional = true) })
+@Plugin(id = Resource.ID, name = Resource.NAME, version = Resource.VERSION, description = Resource.DESCRIPTION, authors = Resource.AUTHOR, url = Resource.URL, dependencies = { @Dependency(id = "Updatifier", optional = true), @Dependency(id = "simpletags", version = "0.3.0", optional = true), @Dependency(id = "helpme", optional = true) })
 public class Main {
 
 	@Inject @ConfigDir(sharedRoot = false)
@@ -82,6 +83,95 @@ public class Main {
 			com.gmail.trentech.simpletags.Main.registerTag(ChannelTag.class);
 			com.gmail.trentech.simpletags.Main.registerCommand(CMDTagChannel.cmd, "channel", "ch");
 		}
+		
+		if(Sponge.getPluginManager().isLoaded("helpme")) {
+			Help say = new Help("say", "say", "Send a message to the server from the console")
+					.setPermission("simplechat.cmd.say")
+					.addUsage("/say <message>")
+					.addUsage("/s <message>")
+					.addExample("/say Drop party coming soon");
+			
+			Help.register(say);
+			
+			Help reply = new Help("reply", "reply", "Reply to a player that sent you a private message")
+					.setPermission("simplechat.cmd.reply")
+					.addUsage("/reply <message>")
+					.addUsage("/r <message>")
+					.addExample("/reply I don't need diamond");
+			
+			Help.register(reply);
+			
+			Help mute = new Help("mute", "mute", "Mutes player from sending you any kind of message, public or private")
+					.setPermission("simplechat.cmd.mute")
+					.addUsage("/mute <player>")
+					.addUsage("/m <player>")
+					.addExample("/mute Notch");
+			
+			Help.register(mute);
+			
+			Help message = new Help("message", "message", "Send a private message to a player")
+					.setPermission("simplechat.cmd.message")
+					.addUsage("/message <player> <message>")
+					.addUsage("/msg <player> <message>")
+					.addExample("/message Notch I found diamond");
+			
+			Help.register(message);
+			
+			Help mail = new Help("mail", "mail", "Sender messages to offline players")
+					.setPermission("simplechat.cmd.mail")
+					.addUsage("/mail <player> <message>")
+					.addUsage("/ml <player> <message>")
+					.addExample("/mail\n /mail Notch I destroyed your house...sorry");
+			
+			Help.register(mail);
+			
+			Help chatWorldChat = new Help("chat worldchat", "worldchat", "Toggle on and off world specific chat")
+					.setPermission("simplechat.cmd.chat.worldchat")
+					.addUsage("/chat worldchat <boolean>")
+					.addUsage("/c w <boolean>")
+					.addExample("/chat worldchat true");
+			
+			Help chatSnoop = new Help("chat snoop", "snoop", "Toggle on and off private message snooping")
+					.setPermission("simplechat.cmd.chat.snoop")
+					.addUsage("/chat snoop <boolean>")
+					.addUsage("/c s <boolean>")
+					.addExample("/chat snoop true");
+			
+			Help chatRange = new Help("chat range", "range", "Toggle on and off chat range")
+					.setPermission("simplechat.cmd.chat.range")
+					.addUsage("/chat range <boolean> [value]")
+					.addUsage("/c r <boolean> [value]")
+					.addExample("/chat range false")
+					.addExample("/chat range true 64");
+			
+			Help chat = new Help("chat", "chat", "Chat settings for SimpleChat")
+					.setPermission("simplechat.cmd.chat")
+					.addChild(chatRange)
+					.addChild(chatSnoop)
+					.addChild(chatWorldChat);
+			
+			Help.register(chat);
+			
+			Help channel = new Help("channel", "channel", "Set channel player will send and receives chat messages from. Set to global to reset")
+					.setPermission("simplechat.cmd.channel")
+					.addUsage("/channel [channel]")
+					.addUsage("/ch [channel]")
+					.addExample("/channel whatever")
+					.addExample("/channel global");
+			
+			Help.register(channel);
+			
+			Help tagChannel = new Help("tag channel", "channel", "View and edit channel tags")
+					.setPermission("simpletags.cmd.tag.channel")
+					.addUsage("/tag channel <channel> <tag>")
+					.addUsage("/t g <channel> <tag>")
+					.addExample(" /tag channel private")
+					.addExample("/tag channel private &e[private]")
+					.addExample("/tag channel private reset");
+			
+			Help.register(Help.get("tag").get().addChild(tagChannel));
+		}
+
 	}
 
 	@Listener

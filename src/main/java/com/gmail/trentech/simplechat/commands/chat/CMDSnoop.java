@@ -9,19 +9,10 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.simplechat.utils.ConfigManager;
-import com.gmail.trentech.simplechat.utils.Help;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
 public class CMDSnoop implements CommandExecutor {
-
-	public CMDSnoop() {
-		Help help = new Help("snoop", "snoop", " Toggle on and off private message snooping");
-		help.setPermission("simplechat.cmd.chat.snoop");
-		help.setSyntax(" /chat snoop <boolean>\n /c s <boolean>");
-		help.setExample(" /chat snoop true");
-		help.save();
-	}
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {

@@ -10,17 +10,8 @@ import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.simplechat.Main;
-import com.gmail.trentech.simplechat.utils.Help;
 
 public class CMDSay implements CommandExecutor {
-
-	public CMDSay() {
-		Help help = new Help("say", "say", " Send a message to the server from the console");
-		help.setPermission("simplechat.cmd.say");
-		help.setSyntax(" /say <message>\n /s <message>");
-		help.setExample(" /say Drop party coming soon");
-		help.save();
-	}
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {

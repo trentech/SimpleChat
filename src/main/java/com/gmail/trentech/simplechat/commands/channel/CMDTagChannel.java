@@ -14,19 +14,10 @@ import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 import com.gmail.trentech.simplechat.data.ChannelTag;
-import com.gmail.trentech.simpletags.utils.Help;
 
 public class CMDTagChannel implements CommandExecutor {
 
 	public static CommandSpec cmd = CommandSpec.builder().permission("simpletags.cmd.tag.channel").arguments(GenericArguments.string(Text.of("channel")), GenericArguments.optional(GenericArguments.string(Text.of("tag")))).executor(new CMDTagChannel()).build();
-
-	public CMDTagChannel() {
-		Help help = new Help("channel", "channel", " View and edit channel tags");
-		help.setPermission("simpletags.cmd.tag.channel");
-		help.setSyntax(" /tag channel <channel> <tag>\n /t g <channel> <tag>");
-		help.setExample(" /tag channel private\n /tag channel private &e[private]\n /tag channel private reset");
-		help.save();
-	}
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {

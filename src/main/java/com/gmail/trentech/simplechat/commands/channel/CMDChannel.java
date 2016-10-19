@@ -13,19 +13,9 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
-import com.gmail.trentech.simplechat.utils.Help;
-
 public class CMDChannel implements CommandExecutor {
 
 	public static HashMap<UUID, String> hash = new HashMap<>();
-
-	public CMDChannel() {
-		Help help = new Help("channel", "channel", " Set channel player will send and receives chat messages from. Set to global to reset");
-		help.setPermission("simplechat.cmd.channel");
-		help.setSyntax(" /channel [channel]\n /m [channel]");
-		help.setExample(" /channel whatever\n /channel global");
-		help.save();
-	}
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {

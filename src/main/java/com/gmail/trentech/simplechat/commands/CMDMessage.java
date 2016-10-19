@@ -14,19 +14,10 @@ import org.spongepowered.api.text.format.TextColors;
 import com.gmail.trentech.simplechat.Main;
 import com.gmail.trentech.simplechat.data.Mute;
 import com.gmail.trentech.simplechat.utils.ConfigManager;
-import com.gmail.trentech.simplechat.utils.Help;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
 public class CMDMessage implements CommandExecutor {
-
-	public CMDMessage() {
-		Help help = new Help("message", "message", " Send a private message to a player");
-		help.setPermission("simplechat.cmd.message");
-		help.setSyntax(" /message <player> <message>\n /msg <player> <message>");
-		help.setExample(" /message Notch I found diamond");
-		help.save();
-	}
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {

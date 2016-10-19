@@ -9,19 +9,10 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.simplechat.utils.ConfigManager;
-import com.gmail.trentech.simplechat.utils.Help;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
 public class CMDRange implements CommandExecutor {
-
-	public CMDRange() {
-		Help help = new Help("range", "range", " Toggle on and off chat range");
-		help.setPermission("simplechat.cmd.chat.range");
-		help.setSyntax(" /chat range <boolean> [value]\n /c r <boolean> [value]");
-		help.setExample(" /chat range false\n /chat range true 64");
-		help.save();
-	}
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {

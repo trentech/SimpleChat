@@ -14,21 +14,12 @@ import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.simplechat.Main;
 import com.gmail.trentech.simplechat.utils.ConfigManager;
-import com.gmail.trentech.simplechat.utils.Help;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
 public class CMDReply implements CommandExecutor {
 
 	private static HashMap<String, String> reply = new HashMap<String, String>();
-
-	public CMDReply() {
-		Help help = new Help("reply", "reply", " Reply to a player that sent you a private message");
-		help.setPermission("simplechat.cmd.reply");
-		help.setSyntax(" /reply <message>\n /r <message>");
-		help.setExample(" /reply I don't need diamond");
-		help.save();
-	}
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {

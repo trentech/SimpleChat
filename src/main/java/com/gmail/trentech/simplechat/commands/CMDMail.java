@@ -21,17 +21,8 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.simplechat.data.Message;
-import com.gmail.trentech.simplechat.utils.Help;
 
 public class CMDMail implements CommandExecutor {
-
-	public CMDMail() {
-		Help help = new Help("mail", "mail", " Sender messages to offline players");
-		help.setPermission("simplechat.cmd.mail");
-		help.setSyntax(" /mail <player> <message>\n /ml <player> <message>");
-		help.setExample(" /mail\n /mail Notch I destroyed your house...sorry");
-		help.save();
-	}
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {

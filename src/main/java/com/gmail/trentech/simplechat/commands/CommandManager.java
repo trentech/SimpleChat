@@ -6,11 +6,9 @@ import org.spongepowered.api.text.Text;
 
 import com.gmail.trentech.simplechat.commands.channel.CMDChannel;
 import com.gmail.trentech.simplechat.commands.chat.CMDChat;
-import com.gmail.trentech.simplechat.commands.chat.CMDHelp;
 import com.gmail.trentech.simplechat.commands.chat.CMDRange;
 import com.gmail.trentech.simplechat.commands.chat.CMDSnoop;
 import com.gmail.trentech.simplechat.commands.chat.CMDWorldChat;
-import com.gmail.trentech.simplechat.utils.Help;
 
 public class CommandManager {
 
@@ -68,19 +66,11 @@ public class CommandManager {
 		    .executor(new CMDWorldChat())
 		    .build();
 
-	private CommandSpec cmdHelp = CommandSpec.builder()
-		    .description(Text.of(" I need help with Simple Broadcast"))
-		    .permission("simplechat.cmd.chat")
-		    .arguments(GenericArguments.choices(Text.of("command"), Help.all()))
-		    .executor(new CMDHelp())
-		    .build();
-	
 	public CommandSpec cmdChat = CommandSpec.builder()
 		    .permission("simplechat.cmd.chat")
 		    .child(cmdRange, "range", "r")
 		    .child(cmdSnoop, "snoop", "s")
 		    .child(cmdWorldChat, "worldchat", "w")
-		    .child(cmdHelp, "help", "h")
 		    .executor(new CMDChat())
 		    .build();
 }
