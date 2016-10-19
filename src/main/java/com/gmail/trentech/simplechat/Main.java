@@ -57,6 +57,13 @@ public class Main {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		if (Sponge.getPluginManager().isLoaded("simpletags")) {
+			Sponge.getEventManager().registerListeners(this, new TagListener());
+
+			com.gmail.trentech.simpletags.Main.registerTag(ChannelTag.class);
+			com.gmail.trentech.simpletags.Main.registerCommand(CMDTagChannel.cmd, "channel", "ch");
+		}
 	}
 
 	@Listener
@@ -77,13 +84,6 @@ public class Main {
 
 		SQLUtils.createTable();
 
-		if (Sponge.getPluginManager().isLoaded("simpletags")) {
-			Sponge.getEventManager().registerListeners(this, new TagListener());
-
-			com.gmail.trentech.simpletags.Main.registerTag(ChannelTag.class);
-			com.gmail.trentech.simpletags.Main.registerCommand(CMDTagChannel.cmd, "channel", "ch");
-		}
-		
 		if(Sponge.getPluginManager().isLoaded("helpme")) {
 			Help say = new Help("say", "say", "Send a message to the server from the console")
 					.setPermission("simplechat.cmd.say")
