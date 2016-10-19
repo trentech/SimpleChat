@@ -121,7 +121,8 @@ public class Main {
 					.setPermission("simplechat.cmd.mail")
 					.addUsage("/mail <player> <message>")
 					.addUsage("/ml <player> <message>")
-					.addExample("/mail\n /mail Notch I destroyed your house...sorry");
+					.addExample("/mail")
+					.addExample("/mail Notch I destroyed your house...sorry");
 			
 			Help.register(mail);
 			
