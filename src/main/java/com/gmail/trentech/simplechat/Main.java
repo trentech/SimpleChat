@@ -57,17 +57,17 @@ public class Main {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+	}
+
+	@Listener
+	public void onInitializationEvent(GameInitializationEvent event) {
 		if (Sponge.getPluginManager().isLoaded("simpletags")) {
 			Sponge.getEventManager().registerListeners(this, new TagListener());
 
 			com.gmail.trentech.simpletags.Main.registerTag(ChannelTag.class);
 			com.gmail.trentech.simpletags.Main.registerCommand(CMDTagChannel.cmd, "channel", "ch");
 		}
-	}
-
-	@Listener
-	public void onInitializationEvent(GameInitializationEvent event) {
+		
 		ConfigManager.init();
 
 		Sponge.getEventManager().registerListeners(this, new EventListener());
