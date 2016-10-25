@@ -16,7 +16,7 @@ public class CMDWorldChat implements CommandExecutor {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		boolean bool = args.<Boolean> getOne("boolean").get();
+		boolean bool = args.<Boolean> getOne("true|false").get();
 
 		ConfigManager configManager = ConfigManager.get();
 		ConfigurationNode config = configManager.getConfig();

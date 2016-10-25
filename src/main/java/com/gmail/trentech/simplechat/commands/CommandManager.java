@@ -50,19 +50,19 @@ public class CommandManager {
 
 	private CommandSpec cmdRange = CommandSpec.builder()
 		    .permission("simplechat.cmd.chat.range")
-		    .arguments(GenericArguments.bool(Text.of("boolean")), GenericArguments.optional(GenericArguments.integer(Text.of("value"))))
+		    .arguments(GenericArguments.bool(Text.of("true|false")), GenericArguments.optional(GenericArguments.integer(Text.of("value"))))
 		    .executor(new CMDRange())
 		    .build();
 	
 	private CommandSpec cmdSnoop = CommandSpec.builder()
 		    .permission("simplechat.cmd.chat.snoop")
-		    .arguments(GenericArguments.bool(Text.of("boolean")))
+		    .arguments(GenericArguments.bool(Text.of("true|false")))
 		    .executor(new CMDSnoop())
 		    .build();
 	
 	private CommandSpec cmdWorldChat = CommandSpec.builder()
 		    .permission("simplechat.cmd.chat.worldchat")
-		    .arguments(GenericArguments.bool(Text.of("boolean")))
+		    .arguments(GenericArguments.bool(Text.of("true|false")))
 		    .executor(new CMDWorldChat())
 		    .build();
 
