@@ -10,14 +10,14 @@ public class CommandHelp {
 
 	public static void init() {
 		if(Sponge.getPluginManager().isLoaded("helpme")) {
-			Usage usageSay = new Usage(Argument.of("<message>", "The message to be broadcasted"));
+//			Usage usageSay = new Usage(Argument.of("<message>", "The message to be broadcasted"));
 			
-			Help say = new Help("say", "say", "Send a message to the server from the console")
-					.setPermission("simplechat.cmd.say")
-					.setUsage(usageSay)
-					.addExample("/say Drop party coming soon");
+//			Help say = new Help("say", "say", "Send a message to the server from the console")
+//					.setPermission("simplechat.cmd.say")
+//					.setUsage(usageSay)
+//					.addExample("/say Drop party coming soon");
 			
-			Help.register(say);
+			//Help.register(say);
 			
 			Usage usageReply = new Usage(Argument.of("<message>", "The message to be sent"));
 			
