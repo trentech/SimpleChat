@@ -80,7 +80,7 @@ public class Main {
 		Sponge.getCommandManager().register(this, commandManager.cmdMessage, "message", "msg");
 		Sponge.getCommandManager().register(this, commandManager.cmdMute, "mute", "m");
 		Sponge.getCommandManager().register(this, commandManager.cmdReply, "reply", "r");
-		//Sponge.getCommandManager().register(this, commandManager.cmdSay, "say", "s");
+		Sponge.getCommandManager().register(this, commandManager.cmdSay, "say", "s");
 
 		SQLUtils.createTable();
 

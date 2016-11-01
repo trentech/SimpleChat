@@ -10,14 +10,14 @@ public class CommandHelp {
 
 	public static void init() {
 		if(Sponge.getPluginManager().isLoaded("helpme")) {
-//			Usage usageSay = new Usage(Argument.of("<message>", "The message to be broadcasted"));
+			Usage usageSay = new Usage(Argument.of("<message ...>", "The message to be broadcasted"));
 			
-//			Help say = new Help("say", "say", "Send a message to the server from the console")
-//					.setPermission("simplechat.cmd.say")
-//					.setUsage(usageSay)
-//					.addExample("/say Drop party coming soon");
+			Help say = new Help("say", "say", "Send a message to the server from the console")
+					.setPermission("simplechat.cmd.say")
+					.setUsage(usageSay)
+					.addExample("/say Drop party coming soon");
 			
-			//Help.register(say);
+			Help.register(say);
 			
 			Usage usageReply = new Usage(Argument.of("<message>", "The message to be sent"));
 			
@@ -28,7 +28,7 @@ public class CommandHelp {
 			
 			Help.register(reply);
 			
-			Usage usagePlayer = new Usage(Argument.of("<player>", "Specifies the targgeted player"));
+			Usage usagePlayer = new Usage(Argument.of("<player>", "Specifies the targetted player"));
 			
 			Help mute = new Help("mute", "mute", "Mutes player from sending you any kind of message, public or private")
 					.setPermission("simplechat.cmd.mute")
@@ -37,7 +37,7 @@ public class CommandHelp {
 			
 			Help.register(mute);
 			
-			Usage usageMessage = new Usage(Argument.of("<player>", "Specifies the targgeted player"))
+			Usage usageMessage = new Usage(Argument.of("<player>", "Specifies the targetted player"))
 					.addArgument(Argument.of("<message>", "The message to be sent"));
 			
 			Help message = new Help("message", "message", "Send a private message to a player")
@@ -84,7 +84,7 @@ public class CommandHelp {
 			
 			Help.register(chat);
 			
-			Usage usageChannel = new Usage(Argument.of("[channel]", "Specifies the targgeted channel"));
+			Usage usageChannel = new Usage(Argument.of("[channel]", "Specifies the targetted channel"));
 			
 			Help channel = new Help("channel", "channel", "Set channel player will send and receives chat messages from. Set to global to reset")
 					.setPermission("simplechat.cmd.channel")
