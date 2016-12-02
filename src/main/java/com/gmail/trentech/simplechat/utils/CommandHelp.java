@@ -94,17 +94,19 @@ public class CommandHelp {
 			
 			Help.register(channel);
 			
-			Usage usageTag = new Usage(Argument.of("<channel>", "Specifies the name of a channel"))
-					.addArgument(Argument.of("<tag>", "Set custom tag. Accepts color codes"));
-			
-			Help tagChannel = new Help("tag channel", "channel", "View and edit channel tags")
-					.setPermission("simpletags.cmd.tag.channel")
-					.setUsage(usageTag)
-					.addExample(" /tag channel private")
-					.addExample("/tag channel private &e[private]")
-					.addExample("/tag channel private reset");
-			
-			Help.register(Help.get("tag").get().addChild(tagChannel));
+			if(Sponge.getPluginManager().isLoaded("simpletags")) {
+				Usage usageTag = new Usage(Argument.of("<channel>", "Specifies the name of a channel"))
+						.addArgument(Argument.of("<tag>", "Set custom tag. Accepts color codes"));
+				
+				Help tagChannel = new Help("tag channel", "channel", "View and edit channel tags")
+						.setPermission("simpletags.cmd.tag.channel")
+						.setUsage(usageTag)
+						.addExample(" /tag channel private")
+						.addExample("/tag channel private &e[private]")
+						.addExample("/tag channel private reset");
+				
+				Help.register(Help.get("tag").get().addChild(tagChannel));
+			}
 		}
 	}
 }

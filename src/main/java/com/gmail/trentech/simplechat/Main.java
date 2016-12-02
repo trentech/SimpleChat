@@ -101,24 +101,36 @@ public class Main {
 	public Path getPath() {
 		return path;
 	}
-	
-	public Text processText(String msg) {
-		Text message = Text.EMPTY;
 
-		while (msg.contains("&u")) {
-			message = Text.join(message, TextSerializers.FORMATTING_CODE.deserialize(msg.substring(0, msg.indexOf("&u{")).replace("&u{", "")));
-
-			String work = msg.substring(msg.indexOf("&u{"), msg.indexOf("}")).replaceFirst("&u\\{", "").replaceFirst("}", "");
-
-			message = Text.join(message, getLink(work));
-
-			msg = msg.substring(msg.indexOf("}"), msg.length()).replaceFirst("}", "");
+	public Text processText(String msg, boolean color) {
+		if(color) {
+			return TextSerializers.FORMATTING_CODE.deserialize(msg);
+		} else {
+			return Text.of(msg);
 		}
-
-		return Text.of(message, TextSerializers.FORMATTING_CODE.deserialize(msg));
 	}
 
-	private Text getLink(String link) {
+	public Text getText(String msg, boolean color, boolean url) {
+		if(url) {
+			Text message = Text.EMPTY;
+			
+			while (msg.contains("&u")) {
+				message = Text.join(message, processText(msg.substring(0, msg.indexOf("&u{")).replace("&u{", ""), color));
+
+				String work = msg.substring(msg.indexOf("&u{"), msg.indexOf("}")).replaceFirst("&u\\{", "").replaceFirst("}", "");
+
+				message = Text.join(message, getLink(work, color));
+
+				msg = msg.substring(msg.indexOf("}"), msg.length()).replaceFirst("}", "");
+			}
+
+			return Text.of(message, processText(msg, color));
+		} else {
+			return processText(msg, color);
+		}
+	}
+
+	private Text getLink(String link, boolean color) {
 		Text.Builder builder = Text.builder();
 		String[] work = link.split(";");
 
@@ -134,23 +146,23 @@ public class Main {
 			URL url = null;
 			try {
 				url = new URL(work[1]);
-				builder.onClick(TextActions.openUrl(url)).append(TextSerializers.FORMATTING_CODE.deserialize(work[2]));
+				builder.onClick(TextActions.openUrl(url)).append(processText(work[2], color));
 			} catch (MalformedURLException e) {
 				return Text.of(TextColors.RED, "Invalid URL detected");
 			}
 		} else if (work[0].equalsIgnoreCase("cmd")) {
-			builder.onClick(TextActions.runCommand(work[1])).append(TextSerializers.FORMATTING_CODE.deserialize(work[2]));
+			builder.onClick(TextActions.runCommand(work[1])).append(processText(work[2], color));
 		} else if (work[0].equalsIgnoreCase("suggest")) {
-			builder.onClick(TextActions.suggestCommand(work[1])).append(TextSerializers.FORMATTING_CODE.deserialize(work[2]));
+			builder.onClick(TextActions.suggestCommand(work[1])).append(processText(work[2], color));
 		} else if (work[0].equalsIgnoreCase("hover")) {
-			builder.onHover(TextActions.showText(TextSerializers.FORMATTING_CODE.deserialize(work[1]))).append(TextSerializers.FORMATTING_CODE.deserialize(work[2]));
+			builder.onHover(TextActions.showText(processText(work[1], color))).append(processText(work[2], color));
 		} else {
 			return Text.of(TextColors.RED, "Invalid TextAction detected");
 		}
 
 		return builder.build();
 	}
-	
+
 	public static PluginContainer getPlugin() {
 		return plugin;
 	}

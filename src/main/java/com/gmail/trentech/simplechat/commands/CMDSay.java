@@ -50,7 +50,7 @@ public class CMDSay implements CommandExecutor {
 			message = message.replace(selector, "");
 		}
 		
-		Text text = Main.instance().processText(message);
+		Text text = Main.instance().getText(message, src.hasPermission("simplechat.text.color"), src.hasPermission("simplechat.text.url"));
 		
 		if(Sponge.getPluginManager().isLoaded("simpletags")) {
 			if(src instanceof Player) {

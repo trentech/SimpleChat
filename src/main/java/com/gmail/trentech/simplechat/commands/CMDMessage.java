@@ -28,8 +28,8 @@ public class CMDMessage implements CommandExecutor {
 		}
 
 		String messagePlain = args.<String> getOne("message").get();
-
-		Text message = Text.of(TextColors.GOLD, "[", src.getName(), "] --> [", player.getName(), "]", TextColors.WHITE, " ", Main.instance().processText(messagePlain));
+		
+		Text message = Text.of(TextColors.GOLD, "[", src.getName(), "] --> [", player.getName(), "]", TextColors.WHITE, " ", Main.instance().getText(messagePlain, src.hasPermission("simplechat.text.color"), src.hasPermission("simplechat.text.url")));
 
 		player.sendMessage(message);
 		src.sendMessage(message);

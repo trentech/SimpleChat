@@ -19,7 +19,6 @@ import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.text.channel.MutableMessageChannel;
 import org.spongepowered.api.text.format.TextColors;
-import org.spongepowered.api.text.serializer.TextSerializers;
 
 import com.gmail.trentech.simplechat.Main;
 import com.gmail.trentech.simplechat.commands.channel.CMDChannel;
@@ -77,7 +76,7 @@ public class EventListener {
 		if (!channel.equalsIgnoreCase("global")) {
 			Text prefix;
 
-			if (Sponge.getPluginManager().isLoaded("com.gmail.trentech.simpletags")) {
+			if (Sponge.getPluginManager().isLoaded("simpletags")) {
 				Optional<ChannelTag> optionalTag = ChannelTag.get(channel);
 
 				if (optionalTag.isPresent()) {
@@ -88,16 +87,8 @@ public class EventListener {
 				prefix = Text.join(Text.of(TextColors.GRAY, "[", channel, "]"), formatter.getHeader().toText());
 				formatter.setHeader(TextTemplate.of(prefix));
 			}
-
-			for (MessageReceiver src : Lists.newArrayList(messageChannel.getMembers())) {
-				if (src instanceof Player) {
-					Player recipient = (Player) src;
-
-					if (!recipient.hasPermission("simplechat.channel." + channel)) {
-						messageChannel.removeMember(src);
-					}
-				}
-			}
+			
+			messageChannel = MessageChannel.permission("simplechat.channel." + channel).asMutable();
 		}
 
 		ConfigurationNode config = ConfigManager.get().getConfig();
@@ -142,9 +133,7 @@ public class EventListener {
 
 		event.setChannel(messageChannel);
 
-		String messageOrig = TextSerializers.FORMATTING_CODE.serialize(event.getFormatter().getBody().toText());
-
-		Text message = Main.instance().processText(messageOrig);
+		Text message = Main.instance().getText(event.getFormatter().getBody().toText().toPlain(), player.hasPermission("simplechat.text.color"), player.hasPermission("simplechat.text.url"));
 
 		formatter.setBody(TextTemplate.of(message));
 	}
