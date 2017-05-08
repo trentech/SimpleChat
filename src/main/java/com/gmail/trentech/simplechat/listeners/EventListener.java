@@ -1,5 +1,8 @@
 package com.gmail.trentech.simplechat.listeners;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.Optional;
 
@@ -20,13 +23,13 @@ import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.text.channel.MutableMessageChannel;
 import org.spongepowered.api.text.format.TextColors;
 
+import com.gmail.trentech.pjc.core.ConfigManager;
+import com.gmail.trentech.pjc.core.SQLManager;
 import com.gmail.trentech.simplechat.Main;
 import com.gmail.trentech.simplechat.commands.channel.CMDChannel;
 import com.gmail.trentech.simplechat.data.ChannelTag;
 import com.gmail.trentech.simplechat.data.Message;
 import com.gmail.trentech.simplechat.data.Mute;
-import com.gmail.trentech.simplechat.utils.ConfigManager;
-import com.gmail.trentech.simplechat.utils.SQLUtils;
 import com.google.common.collect.Lists;
 
 import ninja.leaping.configurate.ConfigurationNode;
@@ -41,8 +44,18 @@ public class EventListener {
 
 		new Mute(player);
 
-		SQLUtils.createPlayerTable(player);
+		try {
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin());
+			Connection connection = sqlManager.getDataSource().getConnection();
 
+			PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + sqlManager.getPrefix(player.getUniqueId().toString()) + " (Name TEXT, Sender TEXT, Message TEXT, Read BOOL)");
+			statement.executeUpdate();
+
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		LinkedList<Message> messages = Message.all(player);
 
 		for (Message message : messages) {
@@ -91,7 +104,7 @@ public class EventListener {
 			messageChannel = MessageChannel.permission("simplechat.channel." + channel).asMutable();
 		}
 
-		ConfigurationNode config = ConfigManager.get().getConfig();
+		ConfigurationNode config = ConfigManager.get(Main.getPlugin()).getConfig();
 
 		if (config.getNode("options", "world_chat").getBoolean()) {
 			for (MessageReceiver src : Lists.newArrayList(messageChannel.getMembers())) {

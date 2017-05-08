@@ -24,18 +24,16 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 import com.gmail.trentech.simplechat.commands.CommandManager;
 import com.gmail.trentech.simplechat.commands.channel.CMDTagChannel;
 import com.gmail.trentech.simplechat.data.ChannelTag;
+import com.gmail.trentech.simplechat.init.Common;
 import com.gmail.trentech.simplechat.listeners.EventListener;
 import com.gmail.trentech.simplechat.listeners.TagListener;
-import com.gmail.trentech.simplechat.utils.CommandHelp;
-import com.gmail.trentech.simplechat.utils.ConfigManager;
 import com.gmail.trentech.simplechat.utils.Resource;
-import com.gmail.trentech.simplechat.utils.SQLUtils;
 import com.google.inject.Inject;
 
 import me.flibio.updatifier.Updatifier;
 
 @Updatifier(repoName = Resource.NAME, repoOwner = Resource.AUTHOR, version = Resource.VERSION)
-@Plugin(id = Resource.ID, name = Resource.NAME, version = Resource.VERSION, description = Resource.DESCRIPTION, authors = Resource.AUTHOR, url = Resource.URL, dependencies = { @Dependency(id = "Updatifier", optional = true), @Dependency(id = "simpletags", optional = true), @Dependency(id = "helpme", version = "0.2.1", optional = true) })
+@Plugin(id = Resource.ID, name = Resource.NAME, version = Resource.VERSION, description = Resource.DESCRIPTION, authors = Resource.AUTHOR, url = Resource.URL, dependencies = { @Dependency(id = "Updatifier", optional = true), @Dependency(id = "simpletags", optional = true), @Dependency(id = "pjc", optional = false) })
 public class Main {
 
 	@Inject @ConfigDir(sharedRoot = false)
@@ -67,8 +65,7 @@ public class Main {
 			com.gmail.trentech.simpletags.Main.registerTag(ChannelTag.class);
 			com.gmail.trentech.simpletags.Main.registerCommand(CMDTagChannel.cmd, "channel", "ch");
 		}
-		
-		ConfigManager.init();
+		Common.initConfig(getPlugin().getId());
 
 		Sponge.getEventManager().registerListeners(this, new EventListener());
 
@@ -82,9 +79,8 @@ public class Main {
 		Sponge.getCommandManager().register(this, commandManager.cmdReply, "reply", "r");
 		Sponge.getCommandManager().register(this, commandManager.cmdSay, "say", "s");
 
-		SQLUtils.createTable();
-
-		CommandHelp.init();
+		Common.initData();
+		Common.initHelp();
 	}
 
 	@Listener

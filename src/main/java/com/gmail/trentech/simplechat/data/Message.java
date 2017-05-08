@@ -11,10 +11,11 @@ import java.util.UUID;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 
+import com.gmail.trentech.pjc.core.ConfigManager;
+import com.gmail.trentech.pjc.core.SQLManager;
 import com.gmail.trentech.simplechat.Main;
-import com.gmail.trentech.simplechat.utils.SQLUtils;
 
-public class Message extends SQLUtils {
+public class Message {
 
 	private String playerUuid;
 
@@ -62,9 +63,12 @@ public class Message extends SQLUtils {
 
 	private void save() {
 		try {
-			Connection connection = getDataSource().getConnection();
+			String database = ConfigManager.get(Main.getPlugin()).getConfig().getNode("settings", "sql", "database").getString();
 
-			PreparedStatement statement = connection.prepareStatement("INSERT into `" + this.playerUuid + "`  (Name, Sender, Message, Read) VALUES (?, ?, ?, ?)");
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin(), database);
+			Connection connection = sqlManager.getDataSource().getConnection();
+			
+			PreparedStatement statement = connection.prepareStatement("INSERT into " + sqlManager.getPrefix(this.playerUuid.toString()) + "  (Name, Sender, Message, Read) VALUES (?, ?, ?, ?)");
 
 			statement.setString(1, this.uuid);
 			statement.setString(2, this.from);
@@ -81,9 +85,12 @@ public class Message extends SQLUtils {
 
 	private void update() {
 		try {
-			Connection connection = getDataSource().getConnection();
+			String database = ConfigManager.get(Main.getPlugin()).getConfig().getNode("settings", "sql", "database").getString();
 
-			PreparedStatement statement = connection.prepareStatement("UPDATE `" + this.playerUuid + "` SET Read = ? WHERE Name = ?");
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin(), database);
+			Connection connection = sqlManager.getDataSource().getConnection();
+
+			PreparedStatement statement = connection.prepareStatement("UPDATE " + sqlManager.getPrefix(this.playerUuid.toString()) + " SET Read = ? WHERE Name = ?");
 
 			statement.setBoolean(1, this.read);
 			statement.setString(2, this.uuid);
@@ -98,9 +105,12 @@ public class Message extends SQLUtils {
 
 	public void delete() {
 		try {
-			Connection connection = getDataSource().getConnection();
+			String database = ConfigManager.get(Main.getPlugin()).getConfig().getNode("settings", "sql", "database").getString();
 
-			PreparedStatement statement = connection.prepareStatement("DELETE from `" + this.playerUuid + "` WHERE Name = ?");
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin(), database);
+			Connection connection = sqlManager.getDataSource().getConnection();
+
+			PreparedStatement statement = connection.prepareStatement("DELETE from " + sqlManager.getPrefix(this.playerUuid.toString()) + " WHERE Name = ?");
 
 			statement.setString(1, this.uuid);
 			statement.executeUpdate();
@@ -117,9 +127,10 @@ public class Message extends SQLUtils {
 		Optional<Message> optionalMessage = Optional.empty();
 
 		try {
-			Connection connection = getDataSource().getConnection();
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin());
+			Connection connection = sqlManager.getDataSource().getConnection();
 
-			PreparedStatement statement = connection.prepareStatement("SELECT * FROM `" + player.getUniqueId().toString() + "`");
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + sqlManager.getPrefix(playerUuid));
 
 			ResultSet result = statement.executeQuery();
 
@@ -148,9 +159,12 @@ public class Message extends SQLUtils {
 		LinkedList<Message> list = new LinkedList<>();
 
 		try {
-			Connection connection = getDataSource().getConnection();
+			String database = ConfigManager.get(Main.getPlugin()).getConfig().getNode("settings", "sql", "database").getString();
 
-			PreparedStatement statement = connection.prepareStatement("SELECT * FROM `" + playerUuid + "`");
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin(), database);
+			Connection connection = sqlManager.getDataSource().getConnection();
+
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + sqlManager.getPrefix(playerUuid));
 
 			ResultSet result = statement.executeQuery();
 

@@ -8,7 +8,8 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
-import com.gmail.trentech.simplechat.utils.ConfigManager;
+import com.gmail.trentech.pjc.Main;
+import com.gmail.trentech.pjc.core.ConfigManager;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -18,7 +19,7 @@ public class CMDWorldChat implements CommandExecutor {
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		boolean bool = args.<Boolean> getOne("true|false").get();
 
-		ConfigManager configManager = ConfigManager.get();
+		ConfigManager configManager = ConfigManager.get(Main.getPlugin());
 		ConfigurationNode config = configManager.getConfig();
 
 		config.getNode("options", "world_chat").setValue(bool);

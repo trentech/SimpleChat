@@ -12,8 +12,8 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
+import com.gmail.trentech.pjc.core.ConfigManager;
 import com.gmail.trentech.simplechat.Main;
-import com.gmail.trentech.simplechat.utils.ConfigManager;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -46,7 +46,7 @@ public class CMDReply implements CommandExecutor {
 		recipient.sendMessage(message);
 		src.sendMessage(message);
 
-		ConfigurationNode config = ConfigManager.get().getConfig();
+		ConfigurationNode config = ConfigManager.get(Main.getPlugin()).getConfig();
 
 		if (config.getNode("options", "pm_snoop").getBoolean() && (!(recipient instanceof ConsoleSource || src instanceof ConsoleSource))) {
 			Sponge.getServer().getConsole().sendMessage(message);

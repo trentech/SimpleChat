@@ -11,9 +11,11 @@ import java.util.Optional;
 
 import org.spongepowered.api.entity.living.player.Player;
 
-import com.gmail.trentech.simplechat.utils.SQLUtils;
+import com.gmail.trentech.pjc.core.ConfigManager;
+import com.gmail.trentech.pjc.core.SQLManager;
+import com.gmail.trentech.simplechat.Main;
 
-public class Mute extends SQLUtils {
+public class Mute {
 
 	private final String name;
 	private List<String> players = new ArrayList<>();
@@ -51,9 +53,12 @@ public class Mute extends SQLUtils {
 
 		String name = player.getUniqueId().toString();
 		try {
-			Connection connection = getDataSource().getConnection();
+			String database = ConfigManager.get(Main.getPlugin()).getConfig().getNode("settings", "sql", "database").getString();
 
-			PreparedStatement statement = connection.prepareStatement("SELECT * FROM Players");
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin(), database);
+			Connection connection = sqlManager.getDataSource().getConnection();
+
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + sqlManager.getPrefix("PLAYERS"));
 
 			ResultSet result = statement.executeQuery();
 
@@ -80,9 +85,12 @@ public class Mute extends SQLUtils {
 
 	private void save() {
 		try {
-			Connection connection = getDataSource().getConnection();
+			String database = ConfigManager.get(Main.getPlugin()).getConfig().getNode("settings", "sql", "database").getString();
 
-			PreparedStatement statement = connection.prepareStatement("INSERT into Players (Name, Players) VALUES (?, ?)");
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin(), database);
+			Connection connection = sqlManager.getDataSource().getConnection();
+
+			PreparedStatement statement = connection.prepareStatement("INSERT into " + sqlManager.getPrefix("PLAYERS") + " (Name, Players) VALUES (?, ?)");
 
 			if (!this.players.isEmpty()) {
 				StringBuilder stringBuilder = new StringBuilder();
@@ -108,9 +116,12 @@ public class Mute extends SQLUtils {
 
 	private void update() {
 		try {
-			Connection connection = getDataSource().getConnection();
+			String database = ConfigManager.get(Main.getPlugin()).getConfig().getNode("settings", "sql", "database").getString();
 
-			PreparedStatement statement = connection.prepareStatement("UPDATE Players SET Players = ? WHERE Name = ?");
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin(), database);
+			Connection connection = sqlManager.getDataSource().getConnection();
+
+			PreparedStatement statement = connection.prepareStatement("UPDATE " + sqlManager.getPrefix("PLAYERS") + " SET Players = ? WHERE Name = ?");
 
 			if (!this.players.isEmpty()) {
 				StringBuilder stringBuilder = new StringBuilder();
