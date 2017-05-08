@@ -11,7 +11,6 @@ import java.util.UUID;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 
-import com.gmail.trentech.pjc.core.ConfigManager;
 import com.gmail.trentech.pjc.core.SQLManager;
 import com.gmail.trentech.simplechat.Main;
 
@@ -63,9 +62,7 @@ public class Message {
 
 	private void save() {
 		try {
-			String database = ConfigManager.get(Main.getPlugin()).getConfig().getNode("settings", "sql", "database").getString();
-
-			SQLManager sqlManager = SQLManager.get(Main.getPlugin(), database);
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin());
 			Connection connection = sqlManager.getDataSource().getConnection();
 			
 			PreparedStatement statement = connection.prepareStatement("INSERT into " + sqlManager.getPrefix(this.playerUuid.toString()) + "  (Name, Sender, Message, Read) VALUES (?, ?, ?, ?)");
@@ -85,9 +82,7 @@ public class Message {
 
 	private void update() {
 		try {
-			String database = ConfigManager.get(Main.getPlugin()).getConfig().getNode("settings", "sql", "database").getString();
-
-			SQLManager sqlManager = SQLManager.get(Main.getPlugin(), database);
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin());
 			Connection connection = sqlManager.getDataSource().getConnection();
 
 			PreparedStatement statement = connection.prepareStatement("UPDATE " + sqlManager.getPrefix(this.playerUuid.toString()) + " SET Read = ? WHERE Name = ?");
@@ -105,9 +100,7 @@ public class Message {
 
 	public void delete() {
 		try {
-			String database = ConfigManager.get(Main.getPlugin()).getConfig().getNode("settings", "sql", "database").getString();
-
-			SQLManager sqlManager = SQLManager.get(Main.getPlugin(), database);
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin());
 			Connection connection = sqlManager.getDataSource().getConnection();
 
 			PreparedStatement statement = connection.prepareStatement("DELETE from " + sqlManager.getPrefix(this.playerUuid.toString()) + " WHERE Name = ?");
@@ -159,9 +152,7 @@ public class Message {
 		LinkedList<Message> list = new LinkedList<>();
 
 		try {
-			String database = ConfigManager.get(Main.getPlugin()).getConfig().getNode("settings", "sql", "database").getString();
-
-			SQLManager sqlManager = SQLManager.get(Main.getPlugin(), database);
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin());
 			Connection connection = sqlManager.getDataSource().getConnection();
 
 			PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + sqlManager.getPrefix(playerUuid));

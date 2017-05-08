@@ -11,7 +11,6 @@ import java.util.Optional;
 
 import org.spongepowered.api.entity.living.player.Player;
 
-import com.gmail.trentech.pjc.core.ConfigManager;
 import com.gmail.trentech.pjc.core.SQLManager;
 import com.gmail.trentech.simplechat.Main;
 
@@ -53,12 +52,10 @@ public class Mute {
 
 		String name = player.getUniqueId().toString();
 		try {
-			String database = ConfigManager.get(Main.getPlugin()).getConfig().getNode("settings", "sql", "database").getString();
-
-			SQLManager sqlManager = SQLManager.get(Main.getPlugin(), database);
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin());
 			Connection connection = sqlManager.getDataSource().getConnection();
 
-			PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + sqlManager.getPrefix("PLAYERS"));
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + sqlManager.getPrefix("SIMPLECHAT.MUTED"));
 
 			ResultSet result = statement.executeQuery();
 
@@ -85,12 +82,10 @@ public class Mute {
 
 	private void save() {
 		try {
-			String database = ConfigManager.get(Main.getPlugin()).getConfig().getNode("settings", "sql", "database").getString();
-
-			SQLManager sqlManager = SQLManager.get(Main.getPlugin(), database);
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin());
 			Connection connection = sqlManager.getDataSource().getConnection();
 
-			PreparedStatement statement = connection.prepareStatement("INSERT into " + sqlManager.getPrefix("PLAYERS") + " (Name, Players) VALUES (?, ?)");
+			PreparedStatement statement = connection.prepareStatement("INSERT into " + sqlManager.getPrefix("SIMPLECHAT.MUTED") + " (Name, Players) VALUES (?, ?)");
 
 			if (!this.players.isEmpty()) {
 				StringBuilder stringBuilder = new StringBuilder();
@@ -116,12 +111,10 @@ public class Mute {
 
 	private void update() {
 		try {
-			String database = ConfigManager.get(Main.getPlugin()).getConfig().getNode("settings", "sql", "database").getString();
-
-			SQLManager sqlManager = SQLManager.get(Main.getPlugin(), database);
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin());
 			Connection connection = sqlManager.getDataSource().getConnection();
 
-			PreparedStatement statement = connection.prepareStatement("UPDATE " + sqlManager.getPrefix("PLAYERS") + " SET Players = ? WHERE Name = ?");
+			PreparedStatement statement = connection.prepareStatement("UPDATE " + sqlManager.getPrefix("SIMPLECHAT.MUTED") + " SET Players = ? WHERE Name = ?");
 
 			if (!this.players.isEmpty()) {
 				StringBuilder stringBuilder = new StringBuilder();
