@@ -17,6 +17,7 @@ import org.spongepowered.api.text.channel.MutableMessageChannel;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.selector.Selector;
 
+import com.gmail.trentech.pjc.help.Help;
 import com.gmail.trentech.simplechat.Main;
 import com.gmail.trentech.simpletags.tags.PlayerTag;
 import com.gmail.trentech.simpletags.tags.SingleTag;
@@ -25,6 +26,13 @@ public class CMDSay implements CommandExecutor {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
+		Help help = Help.get("say").get();
+		
+		if (args.hasAny("help")) {		
+			help.execute(src);
+			return CommandResult.empty();
+		}
+		
 		String message = args.<String> getOne("message").get();
 
 		MutableMessageChannel channel = MessageChannel.TO_ALL.asMutable();

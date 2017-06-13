@@ -13,6 +13,7 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
+import com.gmail.trentech.pjc.help.Help;
 import com.gmail.trentech.simplechat.data.ChannelTag;
 
 public class CMDTagChannel implements CommandExecutor {
@@ -21,6 +22,13 @@ public class CMDTagChannel implements CommandExecutor {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
+		Help help = Help.get("tag channel").get();
+		
+		if (args.hasAny("help")) {		
+			help.execute(src);
+			return CommandResult.empty();
+		}
+		
 		String name = args.<String> getOne("channel").get();
 
 		Optional<ChannelTag> optionalChannelTag = ChannelTag.get(name);

@@ -21,9 +21,9 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
-import com.gmail.trentech.simplechat.commands.CommandManager;
 import com.gmail.trentech.simplechat.commands.channel.CMDTagChannel;
 import com.gmail.trentech.simplechat.data.ChannelTag;
+import com.gmail.trentech.simplechat.init.Commands;
 import com.gmail.trentech.simplechat.init.Common;
 import com.gmail.trentech.simplechat.listeners.EventListener;
 import com.gmail.trentech.simplechat.listeners.TagListener;
@@ -69,15 +69,15 @@ public class Main {
 
 		Sponge.getEventManager().registerListeners(this, new EventListener());
 
-		CommandManager commandManager = new CommandManager();
+		Commands commands = new Commands();
 
-		Sponge.getCommandManager().register(this, commandManager.cmdChannel, "channel", "ch");
-		Sponge.getCommandManager().register(this, commandManager.cmdChat, "chat", "cm");
-		Sponge.getCommandManager().register(this, commandManager.cmdMail, "mail", "ml");
-		Sponge.getCommandManager().register(this, commandManager.cmdMessage, "message", "msg");
-		Sponge.getCommandManager().register(this, commandManager.cmdMute, "mute", "m");
-		Sponge.getCommandManager().register(this, commandManager.cmdReply, "reply", "r");
-		Sponge.getCommandManager().register(this, commandManager.cmdSay, "say", "s");
+		Sponge.getCommandManager().register(this, commands.cmdChannel, "channel", "ch");
+		Sponge.getCommandManager().register(this, commands.cmdChat, "chat", "cm");
+		Sponge.getCommandManager().register(this, commands.cmdMail, "mail", "ml");
+		Sponge.getCommandManager().register(this, commands.cmdMessage, "message", "msg");
+		Sponge.getCommandManager().register(this, commands.cmdMute, "mute", "m");
+		Sponge.getCommandManager().register(this, commands.cmdReply, "reply", "r");
+		Sponge.getCommandManager().register(this, commands.cmdSay, "say", "s");
 
 		Common.initData();
 		Common.initHelp();

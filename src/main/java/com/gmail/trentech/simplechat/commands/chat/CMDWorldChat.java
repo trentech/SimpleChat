@@ -10,6 +10,7 @@ import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.pjc.Main;
 import com.gmail.trentech.pjc.core.ConfigManager;
+import com.gmail.trentech.pjc.help.Help;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -17,6 +18,13 @@ public class CMDWorldChat implements CommandExecutor {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
+		Help help = Help.get("chat worldchat").get();
+		
+		if (args.hasAny("help")) {		
+			help.execute(src);
+			return CommandResult.empty();
+		}
+		
 		boolean bool = args.<Boolean> getOne("true|false").get();
 
 		ConfigManager configManager = ConfigManager.get(Main.getPlugin());

@@ -13,6 +13,7 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.pjc.core.ConfigManager;
+import com.gmail.trentech.pjc.help.Help;
 import com.gmail.trentech.simplechat.Main;
 
 import ninja.leaping.configurate.ConfigurationNode;
@@ -23,6 +24,13 @@ public class CMDReply implements CommandExecutor {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
+		Help help = Help.get("reply").get();
+		
+		if (args.hasAny("help")) {		
+			help.execute(src);
+			return CommandResult.empty();
+		}
+		
 		if (!getReply().containsKey(src.getName())) {
 			throw new CommandException(Text.of(TextColors.RED, "No message to reply to."), false);
 		}

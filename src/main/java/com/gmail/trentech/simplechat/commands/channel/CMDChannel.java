@@ -13,12 +13,21 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
+import com.gmail.trentech.pjc.help.Help;
+
 public class CMDChannel implements CommandExecutor {
 
 	public static HashMap<UUID, String> hash = new HashMap<>();
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
+		Help help = Help.get("channel").get();
+		
+		if (args.hasAny("help")) {		
+			help.execute(src);
+			return CommandResult.empty();
+		}
+		
 		if (src instanceof ConsoleSource) {
 			throw new CommandException(Text.of(TextColors.RED, "Must be a player"), false);
 		}
